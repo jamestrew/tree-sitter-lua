@@ -139,7 +139,7 @@ transformers.documentation_command = function(accumulator, str, node)
   })
 end
 
-transformers.emmy_documentation = function(accumulator, str, node)
+transformers.lua_documentation = function(accumulator, str, node)
   accumulator.class = {}
 
   accumulator.fields = {}
@@ -155,7 +155,7 @@ transformers.emmy_documentation = function(accumulator, str, node)
   end)
 end
 
-transformers.emmy_header = function(accumulator, str, node)
+transformers.doc_header = function(accumulator, str, node)
   return transformers.emmy_comment(accumulator, str, node)
 end
 
@@ -286,7 +286,7 @@ local create_emmy_type_function = function(identifier)
   end
 end
 
-transformers.emmy_return = create_emmy_type_function "return"
+transformers.doc_return = create_emmy_type_function "return"
 transformers.emmy_see = create_emmy_type_function "see"
 transformers.emmy_todo = create_emmy_type_function "todo"
 transformers.emmy_usage = create_emmy_type_function "usage"

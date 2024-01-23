@@ -8,7 +8,7 @@
 ; end
 (program
   (local_function
-    (emmy_documentation
+    (lua_documentation
       (parameter_documentation
         name: (identifier)
         description: (parameter_description))
@@ -26,7 +26,7 @@
     (return_statement (true))))
 ;;; Full documentation with assignment
 ; local x = {}
-; 
+;
 ; --- hello world
 ; --@param y: add 1
 ; x.my_func = function(y)
@@ -37,7 +37,7 @@
     variable: (variable_declarator (identifier)) (table))
 
   (variable_declaration
-    documentation: (emmy_documentation
+    documentation: (lua_documentation
       (parameter_documentation
         name: (identifier)
         description: (parameter_description)))
@@ -53,7 +53,7 @@
 
 ;;; Full documentation with assignment bracket
 ; local x = {}
-; 
+;
 ; --- hello world
 ; --@param y: add 1
 ; x["my_func"] = function(y)
@@ -65,7 +65,7 @@
     variable: (variable_declarator (identifier)) (table))
 
   (variable_declaration
-    documentation: (emmy_documentation
+    documentation: (lua_documentation
       (parameter_documentation
         name: (identifier)
         description: (parameter_description)))

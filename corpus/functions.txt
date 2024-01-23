@@ -207,8 +207,8 @@ function f() end
 
 (program
   (function_statement
-    (emmy_documentation
-      (emmy_header))
+    (lua_documentation
+      (doc_header))
     (function_start)
     (function_name
       (identifier))

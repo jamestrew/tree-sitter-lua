@@ -54,7 +54,7 @@ module.exports = grammar({
 
   conflicts: ($) => [
     [$.variable_declarator, $._prefix_exp],
-    [$.emmy_ignore, $.emmy_comment],
+    [$.doc_ignore, $.doc_comment],
   ],
 
   rules: {
@@ -244,7 +244,7 @@ module.exports = grammar({
       prec.right(
         PREC.DEFAULT,
         seq(
-          field("documentation", optional($.emmy_documentation)),
+          field("documentation", optional($.lua_documentation)),
           optional($.local),
           list_of(field("name", $.variable_declarator), ",", false),
           optional(seq("=", list_of(field("value", $._expression), ",", false)))
@@ -256,7 +256,7 @@ module.exports = grammar({
     //     prec.right(
     //         PREC.PRIORITY,
     //         seq(
-    //             field("documentation", optional($.emmy_documentation)),
+    //             field("documentation", optional($.lua_documentation)),
     //             optional($.local),
     //             field("name", $.variable_declarator),
     //             any_amount_of(",", field("name", $.variable_declarator)),
@@ -364,7 +364,7 @@ module.exports = grammar({
       prec.right(
         PREC.DEFAULT,
         seq(
-          field("documentation", optional($.emmy_documentation)),
+          field("documentation", optional($.lua_documentation)),
           choice(
             seq(
               alias("local", $.local),
@@ -522,41 +522,61 @@ module.exports = grammar({
         )
       ),
 
-    emmy_ignore: () => /---\n/,
-    emmy_comment: ($) =>
+    doc_ignore: () => /---\n/,
+    doc_comment: ($) =>
       token(prec.right(repeat1(choice(/---[^@\n]*\n/, /---\n/)))),
 
-    emmy_type_array: ($) => seq(field("type", $._emmy_type), "[]"),
-    emmy_type_key_value: ($) =>
+    doc_type_array: ($) => seq(field("type", $._doc_type), "[]"),
+    doc_type_key_value: ($) =>
       seq(
         "table<",
-        field("key", $._emmy_type),
+        field("key", $._doc_type),
         ",",
-        field("value", $._emmy_type),
+        field("value", $._doc_type),
         ">"
       ),
 
-    emmy_type: ($) =>
+    doc_type_dictionary: ($) =>
+      seq("{", list_of($.doc_type_dictionary_value, ",", true), "}"),
+
+    doc_function: ($) =>
+      prec.right(
+        PREC.FUNCTION,
+        seq(
+          choice("function(", "fun("),
+          list_of($.doc_function_parameter, ",", false),
+          ")",
+          optional(seq(":", $.doc_identifier))
+        )
+      ),
+
+    doc_function_parameter: ($) =>
+      seq(
+        field("name", $.identifier),
+        optional(seq(":", field("type", $._doc_type)))
+      ),
+
+    doc_identifier: ($) => list_of($._identifier, ".", false),
+
+    doc_type: ($) =>
       seq(
         choice(
-          $.emmy_type_array,
-          $.emmy_type_dictionary,
-          $.emmy_type_key_value,
-          $.emmy_function,
-          $.emmy_identifier,
-          alias($.string, $.emmy_literal)
+          $.doc_type_array,
+          $.doc_type_dictionary,
+          $.doc_type_key_value,
+          $.doc_function,
+          $.doc_identifier,
+          alias($.string, $.doc_literal)
         ),
         field("nullable", optional("?"))
       ),
 
-    emmy_type_dictionary: ($) =>
-      seq("{", list_of($.emmy_type_dictionary_value, ",", true), "}"),
 
-    emmy_type_dictionary_value: ($) =>
+    doc_type_dictionary_value: ($) =>
       seq(
         field("key", choice($.identifier, seq("[", $._expression, "]"))),
         ":",
-        field("value", $._emmy_type)
+        field("value", $._doc_type)
       ),
 
     _bar: (_) => "|",
@@ -567,27 +587,9 @@ module.exports = grammar({
     // Key-Value Table      table<KEY_TYPE, VALUE_TYPE>
     // Table Literal        { key1: VALUE_TYPE, key2: VALUE_TYPE }
     // Function             fun(PARAM: TYPE): RETURN_TYPE
-    _emmy_type: ($) =>
-      prec.right(PREC.COMMA, list_of($.emmy_type, $._bar, false)),
+    _doc_type: ($) =>
+      prec.right(PREC.COMMA, list_of($.doc_type, $._bar, false)),
 
-    emmy_function: ($) =>
-      prec.right(
-        PREC.FUNCTION,
-        seq(
-          choice("function(", "fun("),
-          list_of($.emmy_function_parameter, ",", false),
-          ")",
-          optional(seq(":", $.emmy_identifier))
-        )
-      ),
-
-    emmy_function_parameter: ($) =>
-      seq(
-        field("name", $.identifier),
-        optional(seq(":", field("type", $._emmy_type)))
-      ),
-
-    emmy_identifier: ($) => list_of($._identifier, ".", false),
 
     // Definition:
     // ---@class MY_TYPE[:PARENT_TYPE] [@comment]
@@ -596,19 +598,19 @@ module.exports = grammar({
     //
     // ---@class transport @super class
     // ---@class car : transport @car class
-    emmy_class: ($) =>
+    doc_class: ($) =>
       prec.left(
         seq(
           /\s*---@class\s+/,
-          field("type", $._emmy_type),
-          optional(seq(/\s*:\s*/, field("parent", $._emmy_type))),
+          field("type", $._doc_type),
+          optional(seq(/\s*:\s*/, field("parent", $._doc_type))),
           optional(seq(/\s*@\s*/, field("description", $.class_description))),
           /\n\s*/
         )
       ),
 
     documentation_class: ($) =>
-      prec.right(PREC.PROGRAM, seq($.emmy_class, any_amount_of($.emmy_field))),
+      prec.right(PREC.PROGRAM, seq($.doc_class, any_amount_of($.doc_field))),
 
     // Definition:
     // ---@param param_name MY_TYPE[|other_type] [@comment]
@@ -619,12 +621,12 @@ module.exports = grammar({
     // ---@param example table hello
     // ---@param example (table): hello
     // ---@param ... vararg: hello
-    emmy_parameter: ($) =>
+    doc_parameter: ($) =>
       seq(
         /\s*---@param\s+/,
         field("name", choice($.identifier, $.ellipsis)),
         /\s+/,
-        field("type", $._emmy_type),
+        field("type", $._doc_type),
 
         // TODO: How closely should we be to emmy...
         optional(seq(/\s*:\s*/, field("description", $.parameter_description))),
@@ -638,47 +640,47 @@ module.exports = grammar({
     //
     // ---@field example table hello
     // ---@field example (table): hello
-    emmy_field: ($) =>
+    doc_field: ($) =>
       seq(
         /\s*---@field\s+/,
-        optional(seq(field("visibility", $.emmy_visibility), /\s+/)),
+        optional(seq(field("visibility", $.doc_visibility), /\s+/)),
         field("name", $.identifier),
         optional("?"),
         /\s+/,
-        field("type", $._emmy_type),
+        field("type", $._doc_type),
 
         // TODO: How closely should we be to emmy...
         optional(seq(/\s*:\s*/, field("description", $.field_description))),
         /\n\s*/
       ),
 
-    emmy_visibility: () => choice("public", "protected", "private"),
+    doc_visibility: () => choice("public", "protected", "private"),
 
-    _multiline_emmy_string: ($) =>
+    _multiline_doc_string: ($) =>
       prec.right(
         PREC.PRIORITY,
         seq(/[^\n]+/, any_amount_of(/\s*---[^\n]*/))
         // seq(/[^\n]*/, any_amount_of(/\n\s*---[^\n]*/))
       ),
 
-    class_description: ($) => $._multiline_emmy_string,
-    field_description: ($) => $._multiline_emmy_string,
+    class_description: ($) => $._multiline_doc_string,
+    field_description: ($) => $._multiline_doc_string,
 
     // TODO(conni2461): Pretty sure that doesn't work as expected
-    parameter_description: ($) => $._multiline_emmy_string,
+    parameter_description: ($) => $._multiline_doc_string,
 
-    // emmy_return_description: ($) => $._multiline_emmy_string,
-    emmy_return_description: ($) => /[^\n]*/,
+    // doc_return_description: ($) => $._multiline_doc_string,
+    doc_return_description: ($) => /[^\n]*/,
 
-    emmy_return: ($) =>
+    doc_return: ($) =>
       seq(
         /---@return\s*/,
-        field("type", $._emmy_type),
+        field("type", $._doc_type),
 
         optional(
           seq(
             choice(":", "@comment"),
-            field("description", $.emmy_return_description)
+            field("description", $.doc_return_description)
           )
         )
 
@@ -691,39 +693,39 @@ module.exports = grammar({
         // )
       ),
 
-    emmy_eval: ($) => $._expression,
-    _emmy_eval_container: ($) => seq(/---@eval\s+/, $.emmy_eval),
+    doc_eval: ($) => $._expression,
+    _doc_eval_container: ($) => seq(/---@eval\s+/, $.doc_eval),
 
-    emmy_typedecl: (_) => seq(/---@type.+/, /[^\n]*/),
-    emmy_note: (_) => seq(/---@note.+/, /[^\n]*/),
-    emmy_see: (_) => seq(/---@see.+/, /[^\n]*/),
-    emmy_todo: (_) => seq(/---@todo.+/, /[^\n]*/),
-    emmy_usage: (_) => seq(/---@usage.+/, /[^\n]*/),
-    emmy_varargs: (_) => seq(/---@varargs.+/, /[^\n]*/),
+    doc_typedecl: (_) => seq(/---@type.+/, /[^\n]*/),
+    doc_note: (_) => seq(/---@note.+/, /[^\n]*/),
+    doc_see: (_) => seq(/---@see.+/, /[^\n]*/),
+    doc_todo: (_) => seq(/---@todo.+/, /[^\n]*/),
+    doc_usage: (_) => seq(/---@usage.+/, /[^\n]*/),
+    doc_varargs: (_) => seq(/---@varargs.+/, /[^\n]*/),
 
-    emmy_documentation: ($) =>
+    lua_documentation: ($) =>
       prec.left(
         PREC.DEFAULT,
         seq(
           choice(
-            alias($.emmy_comment, $.emmy_header),
-            $.emmy_typedecl,
-            $.emmy_return
+            alias($.doc_comment, $.doc_header),
+            $.doc_typedecl,
+            $.doc_return
           ),
           any_amount_of(
             choice(
-              $.emmy_ignore,
-              $._emmy_eval_container,
-              $.emmy_class,
-              $.emmy_parameter,
-              $.emmy_field,
-              $.emmy_typedecl,
-              $.emmy_note,
-              $.emmy_see,
-              $.emmy_todo,
-              $.emmy_usage,
-              $.emmy_varargs,
-              $.emmy_return
+              $.doc_ignore,
+              $._doc_eval_container,
+              $.doc_class,
+              $.doc_parameter,
+              $.doc_field,
+              $.doc_typedecl,
+              $.doc_note,
+              $.doc_see,
+              $.doc_todo,
+              $.doc_usage,
+              $.doc_varargs,
+              $.doc_return
             )
           )
         )

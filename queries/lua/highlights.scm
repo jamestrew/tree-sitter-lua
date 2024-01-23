@@ -29,7 +29,7 @@
   (return_statement)
   (module_return_statement)
   (break_statement)] @keyword
- 
+
 
 
 ; [
@@ -110,32 +110,32 @@
   (function_start)
   (function_end)] @keyword.function
 
-(emmy_type) @type
-(emmy_literal) @string
-(emmy_parameter
+(doc_type) @type
+(doc_literal) @string
+(doc_parameter
  (identifier) @parameter
  description: (_)? @comment) @comment
 
-(emmy_class) @comment
-(emmy_field name: (_) @property) @comment
-(emmy_function_parameter
-  name: (_) @parameter) 
+(doc_class) @comment
+(doc_field name: (_) @property) @comment
+(doc_function_parameter
+  name: (_) @parameter)
 
-(emmy_type_dictionary_value key: (identifier) @property)
+(doc_type_dictionary_value key: (identifier) @property)
 
-(emmy_note) @comment
-(emmy_see) @comment
+(doc_note) @comment
+(doc_see) @comment
 
 ; TODO: Make the container so we can still highlight the beginning of the line
-; (emmy_eval_container) @comment
-; (_emmy_eval_container) @comment
+; (doc_eval_container) @comment
+; (_doc_eval_container) @comment
 
-(emmy_return) @comment
+(doc_return) @comment
 
 ; TODO: returns
 
-(emmy_header) @comment
-(emmy_ignore) @comment
+(doc_header) @comment
+(doc_ignore) @comment
 (documentation_brief) @comment
 
 (documentation_command) @comment
