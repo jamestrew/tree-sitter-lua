@@ -255,59 +255,59 @@ local function getNicknames() end
     (function_body_paren)
     (function_end)))
 
-;================================================================================
-;Return documentation with todo
-;================================================================================
-;
-;--- With Text
-;---@todo Something has to be done
-;function with_text()
-;  return false
-;end
-;
-;--------------------------------------------------------------------------------
-;
-;(program
-;  (function_statement
-;    documentation: (lua_documentation
-;      (doc_header)
-;      (doc_todo))
-;    (function_start)
-;    name: (function_name
-;      (identifier))
-;    (function_body_paren)
-;    (function_body_paren)
-;    (function_body
-;      (return_statement
-;        (boolean)))
-;    (function_end)))
-;
-;================================================================================
-;Two lines of top level documentation
-;================================================================================
-;
-;--- hello world
-;--- goodbye world
-;function cool_function()
-;  return true
-;end
-;
-;--------------------------------------------------------------------------------
-;
-;(program
-;  (function_statement
-;    documentation: (lua_documentation
-;      (doc_header))
-;    (function_start)
-;    name: (function_name
-;      (identifier))
-;    (function_body_paren)
-;    (function_body_paren)
-;    (function_body
-;      (return_statement
-;        (boolean)))
-;    (function_end)))
-;
+================================================================================
+Return documentation with todo
+================================================================================
+
+--- With Text
+---@todo Something has to be done
+function with_text()
+  return false
+end
+
+--------------------------------------------------------------------------------
+
+(program
+  (function_statement
+    documentation: (lua_documentation
+      (doc_header)
+      (doc_todo))
+    (function_start)
+    name: (function_name
+      (identifier))
+    (function_body_paren)
+    (function_body_paren)
+    (function_body
+      (return_statement
+        (boolean)))
+    (function_end)))
+
+================================================================================
+Two lines of top level documentation
+================================================================================
+
+--- hello world
+--- goodbye world
+function cool_function()
+  return true
+end
+
+--------------------------------------------------------------------------------
+
+(program
+  (function_statement
+    documentation: (lua_documentation
+      (doc_header))
+    (function_start)
+    name: (function_name
+      (identifier))
+    (function_body_paren)
+    (function_body_paren)
+    (function_body
+      (return_statement
+        (boolean)))
+    (function_end)))
+
 ;================================================================================
 ;Full documentation, no return description
 ;================================================================================
