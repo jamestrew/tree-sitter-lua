@@ -579,8 +579,6 @@ module.exports = grammar({
         field("value", $._doc_type)
       ),
 
-    _bar: (_) => "|",
-
     // Union Type           TYPE_1 | TYPE_2
     // Array                VALUE_TYPE[]
     // Dictionary           { [string]: VALUE_TYPE }
@@ -588,7 +586,7 @@ module.exports = grammar({
     // Table Literal        { key1: VALUE_TYPE, key2: VALUE_TYPE }
     // Function             fun(PARAM: TYPE): RETURN_TYPE
     _doc_type: ($) =>
-      prec.right(PREC.COMMA, list_of($.doc_type, $._bar, false)),
+      prec.right(PREC.COMMA, list_of($.doc_type, "|", false)),
 
 
     // Definition:
@@ -672,26 +670,50 @@ module.exports = grammar({
     // doc_return_description: ($) => $._multiline_doc_string,
     doc_return_description: ($) => /[^\n]*/,
 
+    // ---@return <type> [<name> [comment] | [name] #<comment>]
+    // ---@return boolean enabled
     doc_return: ($) =>
-      seq(
-        /---@return\s*/,
-        field("type", $._doc_type),
-
-        optional(
-          seq(
-            choice(":", "@comment"),
-            field("description", $.doc_return_description)
+      prec.right(
+        99,
+        seq(
+          /---@return\s*/,
+          field("type", $._doc_type),
+          optional(
+            choice(
+              seq(
+                field("name", $.identifier),
+                optional(seq(/ */, field("description", $.doc_return_description))),
+                /\n\s*/
+              ),
+              seq(
+                choice(/\s*:\s*/, /\s*#\s*/),
+                field("description", $.doc_return_description),
+                /\n\s*/
+              )
+            )
           )
-        )
-
-        // TODO: This feels a bit weird, because it seems like maybe whitespace
-        // could break this, but I will leave it for now because it makes me happy.
-        // choice(
-        //     prec.right(
-        //     ),
-        //     "\n"
-        // )
+        ),
       ),
+
+              // seq(
+              //   optional(":"),
+              //   optional(field("name", $.identifier)),
+              //   /\s*#\s*/,
+              //   field("description")
+              // )
+          // optional(
+          //   choice(
+          //     seq(
+          //       field("name", $.identifier),
+          //       optional(field("description", $.doc_return_description))
+          //     ),
+          //     seq(
+          //       optional(field("name", $.identifier)),
+          //       "#",
+          //       field("description", $.doc_return_description)
+          //     )
+          //   )
+          // )
 
     doc_eval: ($) => $._expression,
     _doc_eval_container: ($) => seq(/---@eval\s+/, $.doc_eval),

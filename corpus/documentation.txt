@@ -101,7 +101,7 @@ function in_enabled() end
       (doc_return
         type: (doc_type
           (doc_identifier))
-          name: (identifier)))
+        name: (identifier)))
     (function_start)
     name: (function_name
       (identifier))
@@ -113,7 +113,7 @@ function in_enabled() end
 Return (named, described) documentation
 ================================================================================
 
----@return boolean enabled If the item is enable
+---@return boolean enabled If the item is enabled
 function in_enabled() end
 
 --------------------------------------------------------------------------------
@@ -124,10 +124,133 @@ function in_enabled() end
       (doc_return
         type: (doc_type
           (doc_identifier))
-          name: (identifier)))
+        name: (identifier)
+        description: (doc_return_description)))
     (function_start)
     name: (function_name
       (identifier))
+    (function_body_paren)
+    (function_body_paren)
+    (function_end)))
+
+================================================================================
+Return (described with colon) documentation
+================================================================================
+
+---@return boolean: If the item is enabled
+function in_enabled() end
+
+--------------------------------------------------------------------------------
+
+(program
+  (function_statement
+    documentation: (lua_documentation
+      (doc_return
+        type: (doc_type
+          (doc_identifier))
+        description: (doc_return_description)))
+    (function_start)
+    name: (function_name
+      (identifier))
+    (function_body_paren)
+    (function_body_paren)
+    (function_end)))
+
+================================================================================
+Return (described with #) documentation
+================================================================================
+
+---@return boolean # If the item is enabled
+function in_enabled() end
+
+--------------------------------------------------------------------------------
+
+(program
+  (function_statement
+    documentation: (lua_documentation
+      (doc_return
+        type: (doc_type
+          (doc_identifier))
+        description: (doc_return_description)))
+    (function_start)
+    name: (function_name
+      (identifier))
+    (function_body_paren)
+    (function_body_paren)
+    (function_end)))
+
+================================================================================
+Return (optional with union) documentation
+================================================================================
+
+---@return boolean|nil error
+function in_enabled() end
+
+--------------------------------------------------------------------------------
+
+(program
+  (function_statement
+    documentation: (lua_documentation
+      (doc_return
+        type: (doc_type
+          (doc_identifier))
+        type: (doc_type
+          (doc_identifier))
+        name: (identifier)))
+    (function_start)
+    name: (function_name
+      (identifier))
+    (function_body_paren)
+    (function_body_paren)
+    (function_end)))
+
+================================================================================
+Return (optional with ?) documentation
+================================================================================
+
+---@return boolean? error
+function in_enabled() end
+
+--------------------------------------------------------------------------------
+
+(program
+  (function_statement
+    documentation: (lua_documentation
+      (doc_return
+        type: (doc_type
+          (doc_identifier))
+        name: (identifier)))
+    (function_start)
+    name: (function_name
+      (identifier))
+    (function_body_paren)
+    (function_body_paren)
+    (function_end)))
+
+================================================================================
+Return (variable returns) documentation
+================================================================================
+
+---@return integer count Number of nicknames found
+---@return string
+local function getNicknames() end
+
+--------------------------------------------------------------------------------
+
+(program
+  (function_statement
+    documentation: (lua_documentation
+      (doc_return
+        type: (doc_type
+          (doc_identifier))
+        name: (identifier)
+        description: (doc_return_description))
+      (doc_return
+        type: (doc_type
+          (doc_identifier))))
+    (local)
+    (function_start)
+    name: (identifier)
     (function_body_paren)
     (function_body_paren)
     (function_end)))
