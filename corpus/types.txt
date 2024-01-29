@@ -1,0 +1,767 @@
+================================================================================
+Builtins nil
+================================================================================
+
+---@type nil
+local x
+
+--------------------------------------------------------------------------------
+
+(program
+  (variable_declaration
+    (lua_documentation
+      (doc_typedecl
+        (doc_type_builtin)))
+    (local)
+    (variable_declarator
+      (identifier))))
+
+================================================================================
+Builtins any
+================================================================================
+
+---@type any
+local x
+
+--------------------------------------------------------------------------------
+
+(program
+  (variable_declaration
+    (lua_documentation
+      (doc_typedecl
+        (doc_type_builtin)))
+    (local)
+    (variable_declarator
+      (identifier))))
+
+================================================================================
+Builtins bools
+================================================================================
+
+---@type boolean
+local x
+
+---@type bool
+local x
+
+--------------------------------------------------------------------------------
+
+(program
+  (variable_declaration
+    (lua_documentation
+      (doc_typedecl
+        (doc_type_builtin)))
+    (local)
+    (variable_declarator
+      (identifier)))
+
+  (variable_declaration
+    (lua_documentation
+      (doc_typedecl
+        (doc_type_builtin)))
+    (local)
+    (variable_declarator
+      (identifier))))
+
+================================================================================
+Builtins nil
+================================================================================
+
+---@type string
+local x
+
+--------------------------------------------------------------------------------
+
+(program
+  (variable_declaration
+    (lua_documentation
+      (doc_typedecl
+        (doc_type_builtin)))
+    (local)
+    (variable_declarator
+      (identifier))))
+
+================================================================================
+Builtins number
+================================================================================
+
+---@type number
+local x
+
+--------------------------------------------------------------------------------
+
+(program
+  (variable_declaration
+    (lua_documentation
+      (doc_typedecl
+        (doc_type_builtin)))
+    (local)
+    (variable_declarator
+      (identifier))))
+
+================================================================================
+Builtins integer
+================================================================================
+
+---@type integer
+local x
+
+--------------------------------------------------------------------------------
+
+(program
+  (variable_declaration
+    (lua_documentation
+      (doc_typedecl
+        (doc_type_builtin)))
+    (local)
+    (variable_declarator
+      (identifier))))
+
+================================================================================
+Builtins function
+================================================================================
+
+---@type function
+local x
+
+---@type fun
+local x
+
+--------------------------------------------------------------------------------
+
+(program
+  (variable_declaration
+    (lua_documentation
+      (doc_typedecl
+        (doc_type_builtin)))
+    (local)
+    (variable_declarator
+      (identifier)))
+
+  (variable_declaration
+    (lua_documentation
+      (doc_typedecl
+        (doc_type_builtin)))
+    (local)
+    (variable_declarator
+      (identifier))))
+
+================================================================================
+Builtins table
+================================================================================
+
+---@type table
+local x
+
+--------------------------------------------------------------------------------
+
+(program
+  (variable_declaration
+    (lua_documentation
+      (doc_typedecl
+        (doc_type_builtin)))
+    (local)
+    (variable_declarator
+      (identifier))))
+
+================================================================================
+Builtins thread
+================================================================================
+
+---@type thread
+local x
+
+--------------------------------------------------------------------------------
+
+(program
+  (variable_declaration
+    (lua_documentation
+      (doc_typedecl
+        (doc_type_builtin)))
+    (local)
+    (variable_declarator
+      (identifier))))
+
+================================================================================
+Builtins userdata
+================================================================================
+
+---@type userdata
+local x
+
+---@type lightuserdata
+local x
+
+--------------------------------------------------------------------------------
+
+(program
+  (variable_declaration
+    (lua_documentation
+      (doc_typedecl
+        (doc_type_builtin)))
+    (local)
+    (variable_declarator
+      (identifier)))
+  (variable_declaration
+    (lua_documentation
+      (doc_typedecl
+        (doc_type_builtin)))
+    (local)
+    (variable_declarator
+      (identifier))))
+
+================================================================================
+Identifiers
+================================================================================
+
+---@type bar
+local x
+
+---@type foo.bar
+local x
+
+--------------------------------------------------------------------------------
+
+
+(program
+  (variable_declaration
+    (lua_documentation
+      (doc_typedecl
+        (doc_identifier)))
+    (local)
+    (variable_declarator
+      (identifier)))
+  (variable_declaration
+    (lua_documentation
+      (doc_typedecl
+        (doc_identifier)))
+    (local)
+    (variable_declarator
+      (identifier))))
+
+
+================================================================================
+Multiple declarations
+================================================================================
+
+---@type number, string
+local x, y
+
+--------------------------------------------------------------------------------
+
+(program
+  (variable_declaration
+    (lua_documentation
+      (doc_typedecl
+        (doc_type_builtin)
+        (doc_type_builtin)))
+    (local)
+    (variable_declarator
+      (identifier))
+    (variable_declarator
+      (identifier))))
+
+
+================================================================================
+Unions
+================================================================================
+
+---@type bar|number
+local x
+
+---@type "yes" | 'no'
+local x
+
+--------------------------------------------------------------------------------
+
+
+(program
+  (variable_declaration
+    (lua_documentation
+      (doc_typedecl
+        (doc_type_union
+          (doc_identifier)
+          (doc_type_builtin))))
+    (local)
+    (variable_declarator
+      (identifier)))
+  (variable_declaration
+    (lua_documentation
+      (doc_typedecl
+        (doc_type_union
+          (doc_literal)
+          (doc_literal))))
+    (local)
+    (variable_declarator
+      (identifier))))
+
+
+================================================================================
+Arrays
+================================================================================
+
+---@type string[]
+local x
+
+---@type (string|number)[]
+local x
+
+--------------------------------------------------------------------------------
+
+(program
+  (variable_declaration
+    (lua_documentation
+      (doc_typedecl
+        (doc_type_array
+          (doc_type_builtin))))
+    (local)
+    (variable_declarator
+      (identifier)))
+  (variable_declaration
+    (lua_documentation
+      (doc_typedecl
+        (doc_type_array
+          (doc_type_union
+            (doc_type_builtin)
+            (doc_type_builtin)))))
+    (local)
+    (variable_declarator
+      (identifier))))
+
+
+================================================================================
+Key-Value Table
+================================================================================
+
+---@type table<string, number>
+local x
+
+---@type table<foo, bar>
+local x
+
+---@type table<string, string|number>
+local x
+
+--------------------------------------------------------------------------------
+
+
+(program
+  (variable_declaration
+    (lua_documentation
+      (doc_typedecl
+        (doc_type_key_value
+          (doc_type_builtin)
+          (doc_type_builtin))))
+    (local)
+    (variable_declarator
+      (identifier)))
+  (variable_declaration
+    (lua_documentation
+      (doc_typedecl
+        (doc_type_key_value
+          (doc_identifier)
+          (doc_identifier))))
+    (local)
+    (variable_declarator
+      (identifier)))
+  (variable_declaration
+    (lua_documentation
+      (doc_typedecl
+        (doc_type_key_value
+          (doc_type_builtin)
+          (doc_type_union
+            (doc_type_builtin)
+            (doc_type_builtin)))))
+    (local)
+    (variable_declarator
+      (identifier))))
+
+
+================================================================================
+Dictionary & Table Literal
+================================================================================
+
+---@type { [string]: string }
+local x
+
+---@type { foo: string, ["hello there"]: bool, bar?: string }
+local x
+
+--------------------------------------------------------------------------------
+
+(program
+  (variable_declaration
+    (lua_documentation
+      (doc_typedecl
+        (doc_type_table_literal
+          (doc_table_pair
+            (doc_type_builtin)
+            (doc_type_builtin)))))
+    (local)
+    (variable_declarator
+      (identifier)))
+
+  (variable_declaration
+    (lua_documentation
+      (doc_typedecl
+        (doc_type_table_literal
+          (doc_table_pair
+            (identifier)
+            (doc_type_builtin))
+          (doc_table_pair
+            (string)
+            (doc_type_builtin))
+          (doc_table_pair
+            (identifier)
+            (doc_type_builtin)))))
+    (local)
+    (variable_declarator
+      (identifier))))
+
+
+================================================================================
+Function (no types)
+================================================================================
+
+---@type fun()
+local x
+
+---@type fun(a, b)
+local x
+
+--------------------------------------------------------------------------------
+
+(program
+(variable_declaration
+    (lua_documentation
+      (doc_typedecl
+        (doc_type_function)))
+    (local)
+    (variable_declarator
+      (identifier)))
+  (variable_declaration
+    (lua_documentation
+      (doc_typedecl
+        (doc_type_function
+          (doc_function_parameter
+            (identifier))
+          (doc_function_parameter
+            (identifier)))))
+    (local)
+    (variable_declarator
+      (identifier))))
+
+================================================================================
+Function (basic types)
+================================================================================
+
+---@type function(a: string): string
+local x
+
+---@type function(a: string, b: fun): boolean
+local x
+
+--------------------------------------------------------------------------------
+
+(program
+  (variable_declaration
+    (lua_documentation
+      (doc_typedecl
+        (doc_type_function
+          (doc_function_parameter
+            (identifier)
+            (doc_type_builtin))
+          (doc_function_return
+            (doc_type_builtin)))))
+    (local)
+    (variable_declarator
+      (identifier)))
+
+  (variable_declaration
+    (lua_documentation
+      (doc_typedecl
+        (doc_type_function
+          (doc_function_parameter
+            (identifier)
+            (doc_type_builtin))
+          (doc_function_parameter
+            (identifier)
+            (doc_type_builtin))
+          (doc_function_return
+            (doc_type_builtin)))))
+    (local)
+    (variable_declarator
+      (identifier))))
+
+================================================================================
+Function (nullable type)
+================================================================================
+
+---@type function(a?: string): string
+local x
+
+---@type function(a: string?): string
+local x
+
+---@type fun(): string?
+local x
+
+---@type fun(): string|nil
+local x
+
+
+--------------------------------------------------------------------------------
+
+(program
+  (variable_declaration
+    (lua_documentation
+      (doc_typedecl
+        (doc_type_function
+          (doc_function_parameter
+            (identifier)
+            (doc_type_builtin))
+          (doc_function_return
+            (doc_type_builtin)))))
+    (local)
+    (variable_declarator
+      (identifier)))
+
+  (variable_declaration
+    (lua_documentation
+      (doc_typedecl
+        (doc_type_function
+          (doc_function_parameter
+            (identifier)
+            (doc_type_optional
+              (doc_type_builtin)))
+          (doc_function_return
+            (doc_type_builtin)))))
+    (local)
+    (variable_declarator
+      (identifier)))
+
+  (variable_declaration
+    (lua_documentation
+      (doc_typedecl
+        (doc_type_function
+          (doc_function_return
+            (doc_type_optional
+              (doc_type_builtin))))))
+    (local)
+    (variable_declarator
+      (identifier)))
+
+  (variable_declaration
+    (lua_documentation
+      (doc_typedecl
+        (doc_type_function
+          (doc_function_return
+            (doc_type_union
+              (doc_type_builtin)
+              (doc_type_builtin))))))
+    (local)
+    (variable_declarator
+      (identifier))))
+
+================================================================================
+Function (multiple returns)
+================================================================================
+
+---@type function(): string, boolean
+local x
+
+--------------------------------------------------------------------------------
+
+(program
+  (variable_declaration
+    (lua_documentation
+      (doc_typedecl
+        (doc_type_function
+          (doc_function_return
+            (doc_type_builtin))
+          (doc_function_return
+            (doc_type_builtin)))))
+    (local)
+    (variable_declarator
+      (identifier))))
+
+
+================================================================================
+Function (named returns)
+================================================================================
+
+---@type fun(i: integer): foo: string, bar: boolean, number
+local x
+
+--------------------------------------------------------------------------------
+
+(program
+  (variable_declaration
+    (lua_documentation
+      (doc_typedecl
+        (doc_type_function
+          (doc_function_parameter
+            (identifier)
+            (doc_type_builtin))
+          (doc_function_return
+            (identifier)
+            (doc_type_builtin))
+          (doc_function_return
+            (identifier)
+            (doc_type_builtin))
+          (doc_function_return
+            (doc_type_builtin)))))
+    (local)
+    (variable_declarator
+      (identifier))))
+
+================================================================================
+Function (varargs)
+================================================================================
+
+---@type function(...): any
+local x
+
+---@type function(...: string): any
+local x
+
+---@type function(...?: any): any
+local x
+
+--------------------------------------------------------------------------------
+
+(program
+  (variable_declaration
+    (lua_documentation
+      (doc_typedecl
+        (doc_type_function
+          (doc_function_parameter
+            (ellipsis))
+          (doc_function_return
+            (doc_type_builtin)))))
+    (local)
+    (variable_declarator
+      (identifier)))
+
+  (variable_declaration
+    (lua_documentation
+      (doc_typedecl
+        (doc_type_function
+          (doc_function_parameter
+            (ellipsis)
+            (doc_type_builtin))
+          (doc_function_return
+            (doc_type_builtin)))))
+    (local)
+    (variable_declarator
+      (identifier)))
+
+  (variable_declaration
+    (lua_documentation
+      (doc_typedecl
+        (doc_type_function
+          (doc_function_parameter
+            (ellipsis)
+            (doc_type_builtin))
+          (doc_function_return
+            (doc_type_builtin)))))
+    (local)
+    (variable_declarator
+      (identifier))))
+
+
+================================================================================
+Combinations 1
+================================================================================
+
+---@type { foo: (fun(): string, boolean), bar: string}
+local x
+
+--------------------------------------------------------------------------------
+
+(program
+  (variable_declaration
+    (lua_documentation
+      (doc_typedecl
+        (doc_type_table_literal
+          (doc_table_pair
+            (identifier)
+            (doc_type_function
+              (doc_function_return
+                (doc_type_builtin))
+              (doc_function_return
+                (doc_type_builtin))))
+          (doc_table_pair
+            (identifier)
+            (doc_type_builtin)))))
+    (local)
+    (variable_declarator
+      (identifier))))
+
+
+================================================================================
+Combinations 2
+================================================================================
+
+---@type { foo: fun(): string, boolean, bar: string}
+local x
+
+--------------------------------------------------------------------------------
+
+(program
+  (variable_declaration
+    (lua_documentation
+      (doc_typedecl
+        (doc_type_table_literal
+          (doc_table_pair
+            (identifier)
+            (doc_type_function
+              (doc_function_return
+                (doc_type_builtin))
+              (doc_function_return
+                (doc_type_builtin))
+              (doc_function_return
+                (identifier)
+                (doc_type_builtin)))))))
+    (local)
+    (variable_declarator
+      (identifier))))
+
+================================================================================
+Combinations 2
+================================================================================
+
+---@type { foo: fun(a?, b: string|nil): ((string|boolean), (string[])?), bar: string }
+local x
+
+--------------------------------------------------------------------------------
+
+(program
+  (variable_declaration
+    (lua_documentation
+      (doc_typedecl
+        (doc_type_table_literal
+          (doc_table_pair
+            (identifier)
+            (doc_type_function
+              (doc_function_parameter
+                (identifier))
+              (doc_function_parameter
+                (identifier)
+                (doc_type_union
+                  (doc_type_builtin)
+                  (doc_type_builtin)))
+              (doc_function_return
+                (doc_type_union
+                  (doc_type_builtin)
+                  (doc_type_builtin)))
+              (doc_function_return
+                (doc_type_optional
+                  (doc_type_array
+                    (doc_type_builtin))))))
+          (doc_table_pair
+            (identifier)
+            (doc_type_builtin)))))
+    (local)
+    (variable_declarator
+      (identifier))))
