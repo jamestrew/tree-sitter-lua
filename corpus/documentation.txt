@@ -28,7 +28,7 @@ end
 
 (program
   (comment)
-  (function_statement
+  (function_declaration
     (function_start)
     (function_name
       (identifier))
@@ -48,9 +48,9 @@ end
 --------------------------------------------------------------------------------
 
 (program
-  (function_statement
+  (function_declaration
     documentation: (lua_documentation
-      (doc_header))
+      (doc_comment))
     (function_start)
     name: (function_name
       (identifier))
@@ -73,12 +73,11 @@ function in_enabled() end
 --------------------------------------------------------------------------------
 
 (program
-  (function_statement
+  (function_declaration
     documentation: (lua_documentation
-      (doc_header)
+      (doc_comment)
       (doc_return
-        type: (doc_type
-          (doc_identifier))))
+        type: (doc_type_builtin)))
     (function_start)
     name: (function_name
       (identifier))
@@ -96,11 +95,10 @@ function in_enabled() end
 --------------------------------------------------------------------------------
 
 (program
-  (function_statement
+  (function_declaration
     documentation: (lua_documentation
       (doc_return
-        type: (doc_type
-          (doc_identifier))
+        type: (doc_type_builtin)
         name: (identifier)))
     (function_start)
     name: (function_name
@@ -109,75 +107,72 @@ function in_enabled() end
     (function_body_paren)
     (function_end)))
 
-================================================================================
-Return (named, described) documentation
-================================================================================
+; ================================================================================
+; Return (named, described) documentation
+; ================================================================================
 
----@return boolean enabled If the item is enabled
-function in_enabled() end
+; ---@return boolean enabled If the item is enabled
+; function in_enabled() end
 
---------------------------------------------------------------------------------
+; --------------------------------------------------------------------------------
 
-(program
-  (function_statement
-    documentation: (lua_documentation
-      (doc_return
-        type: (doc_type
-          (doc_identifier))
-        name: (identifier)
-        description: (doc_return_description)))
-    (function_start)
-    name: (function_name
-      (identifier))
-    (function_body_paren)
-    (function_body_paren)
-    (function_end)))
+; (program
+;   (function_declaration
+;     documentation: (lua_documentation
+;     (doc_return
+;       type: (doc_type_builtin)
+;       name: (identifier)
+;       description: (doc_return_description)))
+;     (function_start)
+;       name: (function_name
+;       (identifier))
+;     (function_body_paren)
+;     (function_body_paren)
+;     (function_end)))
 
-================================================================================
-Return (described with colon) documentation
-================================================================================
+; ================================================================================
+; Return (described with colon) documentation
+; ================================================================================
 
----@return boolean: If the item is enabled
-function in_enabled() end
+; ---@return boolean: If the item is enabled
+; function in_enabled() end
 
---------------------------------------------------------------------------------
+; --------------------------------------------------------------------------------
 
-(program
-  (function_statement
-    documentation: (lua_documentation
-      (doc_return
-        type: (doc_type
-          (doc_identifier))
-        description: (doc_return_description)))
-    (function_start)
-    name: (function_name
-      (identifier))
-    (function_body_paren)
-    (function_body_paren)
-    (function_end)))
+; (program
+;   (function_declaration
+;     documentation: (lua_documentation
+;       (doc_return
+;         type: (doc_type_builtin)
+;         description: (doc_return_description)))
+;     (function_start)
+;     name: (function_name
+;       (identifier))
+;     (function_body_paren)
+;     (function_body_paren)
+;     (function_end)))
 
-================================================================================
-Return (described with #) documentation
-================================================================================
+; ================================================================================
+; Return (described with #) documentation
+; ================================================================================
 
----@return boolean # If the item is enabled
-function in_enabled() end
+; ---@return boolean # If the item is enabled
+; function in_enabled() end
 
---------------------------------------------------------------------------------
+; --------------------------------------------------------------------------------
 
-(program
-  (function_statement
-    documentation: (lua_documentation
-      (doc_return
-        type: (doc_type
-          (doc_identifier))
-        description: (doc_return_description)))
-    (function_start)
-    name: (function_name
-      (identifier))
-    (function_body_paren)
-    (function_body_paren)
-    (function_end)))
+; (program
+;   (function_declaration
+;     documentation: (lua_documentation
+;       (doc_return
+;         type: (doc_type_builtin)
+;         description: (doc_return_description)))
+;     (function_start)
+;     name: (function_name
+;       (identifier))
+;     (function_body_paren)
+;     (function_body_paren)
+;     (function_end)))
 
 ================================================================================
 Return (optional with union) documentation
@@ -189,13 +184,12 @@ function in_enabled() end
 --------------------------------------------------------------------------------
 
 (program
-  (function_statement
+  (function_declaration
     documentation: (lua_documentation
       (doc_return
-        type: (doc_type
-          (doc_identifier))
-        type: (doc_type
-          (doc_identifier))
+        type: (doc_type_union
+          (doc_type_builtin)
+          (doc_type_builtin))
         name: (identifier)))
     (function_start)
     name: (function_name
@@ -214,11 +208,11 @@ function in_enabled() end
 --------------------------------------------------------------------------------
 
 (program
-  (function_statement
+  (function_declaration
     documentation: (lua_documentation
       (doc_return
-        type: (doc_type
-          (doc_identifier))
+        type: (doc_type_optional
+          (doc_type_builtin))
         name: (identifier)))
     (function_start)
     name: (function_name
@@ -227,33 +221,31 @@ function in_enabled() end
     (function_body_paren)
     (function_end)))
 
-================================================================================
-Return (variable returns) documentation
-================================================================================
-
----@return integer count Number of nicknames found
----@return string
-local function getNicknames() end
-
---------------------------------------------------------------------------------
-
-(program
-  (function_statement
-    documentation: (lua_documentation
-      (doc_return
-        type: (doc_type
-          (doc_identifier))
-        name: (identifier)
-        description: (doc_return_description))
-      (doc_return
-        type: (doc_type
-          (doc_identifier))))
-    (local)
-    (function_start)
-    name: (identifier)
-    (function_body_paren)
-    (function_body_paren)
-    (function_end)))
+;================================================================================
+;Return (variable returns) documentation
+;================================================================================
+;
+;---@return integer count Number of nicknames found
+;---@return string
+;local function getNicknames() end
+;
+;--------------------------------------------------------------------------------
+;
+;(program
+;  (function_declaration
+;    documentation: (lua_documentation
+;      (doc_return
+;        type: (doc_type_builtin)
+;        name: (identifier)
+;        description: (doc_return_description))
+;      (doc_return
+;        type: (doc_type_builtin)))
+;    (local)
+;    (function_start)
+;    name: (identifier)
+;    (function_body_paren)
+;    (function_body_paren)
+;    (function_end)))
 
 ================================================================================
 Return documentation with todo
@@ -268,9 +260,9 @@ end
 --------------------------------------------------------------------------------
 
 (program
-  (function_statement
+  (function_declaration
     documentation: (lua_documentation
-      (doc_header)
+      (doc_comment)
       (doc_todo))
     (function_start)
     name: (function_name
@@ -295,9 +287,10 @@ end
 --------------------------------------------------------------------------------
 
 (program
-  (function_statement
+  (function_declaration
     documentation: (lua_documentation
-      (doc_header))
+      (doc_comment)
+      (doc_comment))
     (function_start)
     name: (function_name
       (identifier))
@@ -307,6 +300,143 @@ end
       (return_statement
         (boolean)))
     (function_end)))
+
+
+;================================================================================
+;Function param (simple)
+;================================================================================
+;
+;---@param username string
+;---@param foo string|boolean
+;function setUsername(username, foo) end
+;
+;--------------------------------------------------------------------------------
+;
+;(program
+;  (function_declaration
+;    documentation: (lua_documentation
+;      (doc_parameter
+;        name: (identifier)
+;        type: (doc_type_builtin))
+;      (doc_parameter
+;        name: (identifier)
+;        type: (doc_type_union
+;          (doc_type_builtin)
+;          (doc_type_builtin))))
+;    (function_start)
+;    name: (function_name
+;      (identifier))
+;    (function_body_paren)
+;    (parameter_list
+;      (identifier)
+;      (identifier))
+;    (function_body_paren)
+;    (function_end)))
+
+
+;================================================================================
+;Function param (simple w/ desc)
+;================================================================================
+;
+;---@param username string The name to set for this user
+;function setUsername(username) end
+;
+;--------------------------------------------------------------------------------
+;
+;(program
+;  (function_declaration
+;    documentation: (lua_documentation
+;      (doc_parameter
+;        name: (identifier)
+;        type: (doc_type_builtin)
+;        description: (parameter_description)))
+;    (function_start)
+;    name: (function_name
+;      (identifier))
+;    (function_body_paren)
+;    (parameter_list
+;      (identifier))
+;    (function_body_paren)
+;    (function_end)))
+;
+;
+;================================================================================
+;Function param (optional para)
+;================================================================================
+;
+;---@param role "admin"|'user' The name of the role
+;---@param isActive? boolean: If the role is currently active
+;---@return Role
+;function Role.new(role, isActive) end
+;
+;--------------------------------------------------------------------------------
+;
+;(program
+;  (function_declaration
+;    documentation: (lua_documentation
+;      (doc_parameter
+;        name: (identifier)
+;        type: (doc_type
+;          (doc_literal))
+;        description: (parameter_description))
+;      (doc_parameter
+;        name: (identifier)
+;        type: (doc_type
+;          (doc_identifier))
+;        description: (parameter_description))
+;      (doc_return
+;        type: (doc_type
+;          (doc_identifier))))
+;    (function_start)
+;    name: (function_name
+;      (identifier)
+;      (table_dot)
+;      (identifier))
+;    (function_body_paren)
+;    (parameter_list
+;      (identifier)
+;      (identifier))
+;    (function_body_paren)
+;    (function_end)))
+;
+;
+;================================================================================
+;Function param (varargs)
+;================================================================================
+;
+;---@param index integer
+;---@param ... string Tags to add to this entry
+;local function addTags(index, ...) end
+;
+;--------------------------------------------------------------------------------
+;
+;(program
+;  (function_declaration
+;    documentation: (lua_documentation
+;      (doc_parameter
+;        name: (identifier)
+;        type: (doc_type
+;          (doc_literal))
+;        description: (parameter_description))
+;      (doc_parameter
+;        name: (identifier)
+;        type: (doc_type
+;          (doc_identifier))
+;        description: (parameter_description))
+;      (doc_return
+;        type: (doc_type
+;          (doc_identifier))))
+;    (function_start)
+;    name: (function_name
+;      (identifier)
+;      (table_dot)
+;      (identifier))
+;    (function_body_paren)
+;    (parameter_list
+;      (identifier)
+;      (identifier))
+;    (function_body_paren)
+;    (function_end)))
 
 ;================================================================================
 ;Full documentation, no return description
@@ -323,9 +453,9 @@ end
 ;--------------------------------------------------------------------------------
 ;
 ;(program
-;  (function_statement
+;  (function_declaration
 ;    documentation: (lua_documentation
-;      (doc_header)
+;      (doc_comment)
 ;      (doc_parameter
 ;        name: (identifier)
 ;        type: (doc_type
@@ -367,9 +497,9 @@ end
 ;--------------------------------------------------------------------------------
 ;
 ;(program
-;  (function_statement
+;  (function_declaration
 ;    documentation: (lua_documentation
-;      (doc_header)
+;      (doc_comment)
 ;      (doc_parameter
 ;        name: (identifier)
 ;        type: (doc_type
@@ -410,9 +540,9 @@ end
 ;--------------------------------------------------------------------------------
 ;
 ;(program
-;  (function_statement
+;  (function_declaration
 ;    documentation: (lua_documentation
-;      (doc_header)
+;      (doc_comment)
 ;      (doc_parameter
 ;        name: (ellipsis)
 ;        type: (doc_type
@@ -441,9 +571,9 @@ end
 ;--------------------------------------------------------------------------------
 ;
 ;(program
-;  (function_statement
+;  (function_declaration
 ;    documentation: (lua_documentation
-;      (doc_header)
+;      (doc_comment)
 ;      (doc_parameter
 ;        name: (identifier)
 ;        type: (doc_type
@@ -474,7 +604,7 @@ end
 ;(program
 ;  (variable_declaration
 ;    documentation: (lua_documentation
-;      (doc_header)
+;      (doc_comment)
 ;      (doc_parameter
 ;        name: (identifier)
 ;        type: (doc_type
@@ -506,7 +636,7 @@ end
 ;(program
 ;  (variable_declaration
 ;    documentation: (lua_documentation
-;      (doc_header)
+;      (doc_comment)
 ;      (doc_parameter
 ;        name: (identifier)
 ;        type: (doc_type
@@ -555,9 +685,9 @@ end
 ;--------------------------------------------------------------------------------
 ;
 ;(program
-;  (function_statement
+;  (function_declaration
 ;    (lua_documentation
-;      (doc_header)
+;      (doc_comment)
 ;      (doc_parameter
 ;        (identifier)
 ;        (doc_type
@@ -628,9 +758,9 @@ end
 ;--------------------------------------------------------------------------------
 ;
 ;(program
-;  (function_statement
+;  (function_declaration
 ;    (lua_documentation
-;      (doc_header)
+;      (doc_comment)
 ;      (doc_eval
 ;        (binary_operation
 ;          (number)
@@ -669,9 +799,9 @@ end
 ;    (variable_declarator
 ;      (identifier))
 ;    (tableconstructor))
-;  (function_statement
+;  (function_declaration
 ;    (lua_documentation
-;      (doc_header)
+;      (doc_comment)
 ;      (doc_parameter
 ;        (identifier)
 ;        (doc_type
@@ -723,9 +853,9 @@ end
 ;--------------------------------------------------------------------------------
 ;
 ;(program
-;  (function_statement
+;  (function_declaration
 ;    (lua_documentation
-;      (doc_header)
+;      (doc_comment)
 ;      (doc_parameter
 ;        (identifier)
 ;        (doc_type
@@ -839,9 +969,9 @@ end
 ;    (variable_declarator
 ;      (identifier))
 ;    (tableconstructor))
-;  (function_statement
+;  (function_declaration
 ;    (lua_documentation
-;      (doc_header)
+;      (doc_comment)
 ;      (doc_class
 ;        (doc_type
 ;          (doc_identifier))
@@ -905,9 +1035,9 @@ end
 ;      (doc_type
 ;        (doc_identifier))
 ;      (class_description)))
-;  (function_statement
+;  (function_declaration
 ;    (lua_documentation
-;      (doc_header)
+;      (doc_comment)
 ;      (doc_class
 ;        (doc_type
 ;          (doc_identifier))
@@ -996,9 +1126,9 @@ end
 ;--------------------------------------------------------------------------------
 ;
 ;(program
-;  (function_statement
+;  (function_declaration
 ;    (lua_documentation
-;      (doc_header)
+;      (doc_comment)
 ;      (doc_parameter
 ;        (identifier)
 ;        (doc_type
@@ -1049,9 +1179,9 @@ end
 ;--------------------------------------------------------------------------------
 ;
 ;(program
-;  (function_statement
+;  (function_declaration
 ;    (lua_documentation
-;      (doc_header)
+;      (doc_comment)
 ;      (doc_parameter
 ;        (identifier)
 ;        (doc_type
@@ -1078,9 +1208,9 @@ end
 ;--------------------------------------------------------------------------------
 ;
 ;(program
-;  (function_statement
+;  (function_declaration
 ;    (lua_documentation
-;      (doc_header)
+;      (doc_comment)
 ;      (doc_parameter
 ;        (identifier)
 ;        (doc_type

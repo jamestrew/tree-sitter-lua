@@ -8,7 +8,7 @@ function x() return 5 end
 ---
 
 (program
- (function_statement
+ (function_declaration
   (function_start)
   name: (function_name (identifier))
   (function_body_paren)
@@ -25,7 +25,7 @@ function t.x() return 5 end
 ---
 
 (program
- (function_statement
+ (function_declaration
   (function_start)
   name: (function_name (identifier) (table_dot) (identifier))
   (function_body_paren)
@@ -42,7 +42,7 @@ function t:x() return 5 end
 ---
 
 (program
- (function_statement
+ (function_declaration
   (function_start)
   name: (function_name (identifier) (table_colon) (identifier))
   (function_body_paren)
@@ -59,7 +59,7 @@ local function f() print("hi"); return 5 end
 ---
 
 (program
- (function_statement
+ (function_declaration
   (local)
   (function_start)
   name: (identifier)
@@ -83,7 +83,7 @@ local function t.x() return 5 end
 ---
 
 (program
- (function_statement
+ (function_declaration
   (local)
   (function_start)
   (identifier)
@@ -102,7 +102,7 @@ function f(x) end
 ---
 
 (program
- (function_statement
+ (function_declaration
   (function_start)
   (function_name (identifier))
   (function_body_paren)
@@ -119,7 +119,7 @@ function f(x,) end
 ---
 
 (program
- (function_statement
+ (function_declaration
   (function_start)
   (function_name (identifier))
   (function_body_paren)
@@ -137,7 +137,7 @@ function f(wow, two_vars) end
 ---
 
 (program
- (function_statement
+ (function_declaration
   (function_start)
   (function_name (identifier))
   (function_body_paren)
@@ -154,7 +154,7 @@ function f(...) end
 ---
 
 (program
- (function_statement
+ (function_declaration
   (function_start)
   (function_name (identifier))
   (function_body_paren)
@@ -171,7 +171,7 @@ function f(x, ...) end
 ---
 
 (program
- (function_statement
+ (function_declaration
   (function_start)
   (function_name (identifier))
   (function_body_paren)
@@ -188,7 +188,7 @@ function f(x, y, z, ...) end
 ---
 
 (program
- (function_statement
+ (function_declaration
   (function_start)
   (function_name (identifier))
   (function_body_paren)
@@ -206,9 +206,9 @@ function f() end
 ---
 
 (program
-  (function_statement
+  (function_declaration
     (lua_documentation
-      (doc_header))
+      (doc_ignore))
     (function_start)
     (function_name
       (identifier))

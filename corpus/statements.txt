@@ -8,7 +8,7 @@ x = nil
 ---
 
 (program
-  (variable_declaration
+  (assignment
     (variable_declarator (identifier))
     (nil)))
 
@@ -21,7 +21,7 @@ x = true
 ---
 
 (program
-  (variable_declaration
+  (assignment
     (variable_declarator (identifier))
     (boolean)))
 
@@ -34,7 +34,7 @@ x = false
 ---
 
 (program
-  (variable_declaration
+  (assignment
     (variable_declarator (identifier))
     (boolean)))
 
@@ -47,7 +47,7 @@ x = 1
 ---
 
 (program
-  (variable_declaration
+  (assignment
     (variable_declarator (identifier))
     (number)))
 
@@ -60,7 +60,7 @@ x = y
 ---
 
 (program
-  (variable_declaration
+  (assignment
     (variable_declarator (identifier))
     (identifier)))
 
@@ -73,7 +73,7 @@ x = 1 + 2
 ---
 
 (program
-  (variable_declaration
+  (assignment
     (variable_declarator (identifier))
     (binary_operation (number) (number))))
 
@@ -86,7 +86,7 @@ x = y + z
 ---
 
 (program
-  (variable_declaration
+  (assignment
     (variable_declarator (identifier))
     (binary_operation (identifier) (identifier))))
 
@@ -113,7 +113,7 @@ x, y, z = 1, 2, 3
 ---
 
 (program
-  (variable_declaration
+  (assignment
     (variable_declarator (identifier))
     (variable_declarator (identifier))
     (variable_declarator (identifier))
@@ -130,7 +130,7 @@ t = {}
 ---
 
 (program
-  (variable_declaration
+  (assignment
     (variable_declarator (identifier))
     (tableconstructor)))
 
@@ -143,7 +143,7 @@ t = { 1 }
 ---
 
 (program
-  (variable_declaration
+  (assignment
     name: (variable_declarator (identifier))
     value: (tableconstructor
             (fieldlist (field value: (number))))))
@@ -157,7 +157,7 @@ t = { 1, 2, 3 }
 ---
 
 (program
-  (variable_declaration
+  (assignment
     name: (variable_declarator (identifier))
     value: (tableconstructor
             (fieldlist
@@ -174,7 +174,7 @@ t = { x = 1, y = 2 }
 ---
 
 (program
-  (variable_declaration
+  (assignment
     name: (variable_declarator (identifier))
     value: (tableconstructor
             (fieldlist
@@ -194,7 +194,7 @@ t = { [x] = 1, ["y"] = 2 }
 ---
 
 (program
-  (variable_declaration
+  (assignment
     name: (variable_declarator (identifier))
     value: (tableconstructor
             (fieldlist
@@ -208,7 +208,7 @@ t = { [x] = 1, ["y"] = 2 }
                 key: (string)
                 field_right_bracket: (field_right_bracket)
                 value: (number))))))
-        
+
 
 ==================
 Can make a table with some expressions, some nothing and some keys
@@ -219,7 +219,7 @@ t = { 1, 2, x = 1, ["y"] = 2 }
 ---
 
 (program
-  (variable_declaration
+  (assignment
     name: (variable_declarator (identifier))
     value: (tableconstructor
             (fieldlist
@@ -233,7 +233,7 @@ t = { 1, 2, x = 1, ["y"] = 2 }
                 key: (string)
                 field_right_bracket: (field_right_bracket)
                 value: (number))))))
-        
+
 
 ==================
 Can assign a function result
@@ -244,13 +244,13 @@ foo = my_func()
 ---
 
 (program
-  (variable_declaration
+  (assignment
     name: (variable_declarator (identifier))
     value: (function_call
             prefix: (identifier)
             (function_call_paren)
             (function_call_paren))))
-      
+
 
 ==================
 Can assign a function with params
@@ -261,7 +261,7 @@ foo = my_func(x, 2, "3")
 ---
 
 (program
-  (variable_declaration
+  (assignment
     name: (variable_declarator (identifier))
     value: (function_call
             prefix: (identifier)
@@ -271,7 +271,7 @@ foo = my_func(x, 2, "3")
                     (number)
                     (string))
             (function_call_paren))))
-      
+
 
 ==================
 Can call a function with a string value
@@ -282,7 +282,7 @@ foo = my_func "hello world"
 ---
 
 (program
-  (variable_declaration
+  (assignment
     name: (variable_declarator (identifier))
     value: (function_call
             prefix: (identifier)
@@ -297,7 +297,7 @@ foo = my_func {}
 ---
 
 (program
-  (variable_declaration
+  (assignment
     name: (variable_declarator (identifier))
     value: (function_call
             prefix: (identifier)
@@ -312,7 +312,7 @@ foo = my_func()()
 ---
 
 (program
-  (variable_declaration
+  (assignment
     name: (variable_declarator (identifier))
     value: (function_call
             prefix: (function_call
@@ -331,13 +331,13 @@ foo = my_table.func()
 ---
 
 (program
-  (variable_declaration
+  (assignment
     (variable_declarator (identifier))
     (function_call
       (identifier) (identifier)
       (function_call_paren)
       (function_call_paren))))
-      
+
 
 ==================
 Can call a table function with lots of ids
@@ -348,13 +348,13 @@ foo = my_table.func.x.y()
 ---
 
 (program
-  (variable_declaration
+  (assignment
     (variable_declarator (identifier))
     (function_call
       (identifier) (identifier) (identifier) (identifier)
       (function_call_paren)
       (function_call_paren))))
-      
+
 
 ==================
 Can set namelist
@@ -396,9 +396,9 @@ y = 2
 ---
 
 (program
-  (variable_declaration (variable_declarator (identifier)) (number))
-  (variable_declaration (variable_declarator (identifier)) (number)))
-  
+  (assignment (variable_declarator (identifier)) (number))
+  (assignment (variable_declarator (identifier)) (number)))
+
 
 ==================
 Can do comments at the end of a line
@@ -409,7 +409,7 @@ x = nil -- Comment
 ---
 
 (program
-  (variable_declaration
+  (assignment
     (variable_declarator (identifier))
     (nil))
   (comment))
@@ -423,7 +423,7 @@ x = (1)
 ---
 
 (program
-  (variable_declaration (variable_declarator (identifier)) (left_paren) (number) (right_paren)))
+  (assignment (variable_declarator (identifier)) (left_paren) (number) (right_paren)))
 
 ==================
 Multi declaration
@@ -479,7 +479,7 @@ x = {}
     (local)
     (variable_declarator
       (identifier)))
-  (variable_declaration
+  (assignment
     (variable_declarator
       (identifier))
     (tableconstructor)))

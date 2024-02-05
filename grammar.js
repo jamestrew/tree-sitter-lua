@@ -40,7 +40,11 @@ module.exports = grammar({
     $._string_end,
   ],
 
-  extras: ($) => [/[\n]/, /\s/, $.comment],
+  extras: ($) => [
+    // /[\n]/,
+    /\s/,
+    $.comment,
+  ],
 
   inline: ($) => [
     $._expression,
@@ -90,14 +94,14 @@ module.exports = grammar({
         PREC.STATEMENT,
         seq(
           choice(
-            $.variable_declaration,
+            $.assignment,
+            $._declaration,
             $.function_call,
             $.do_statement,
             $.while_statement,
             $.repeat_statement,
             $.if_statement,
             $.for_statement,
-            $.function_statement,
             // $.comment
           ),
           optional(";"),
@@ -240,37 +244,43 @@ module.exports = grammar({
 
     local: (_) => "local",
 
+    assignment: ($) =>
+      seq(
+        list_of(field("name", $.variable_declarator), ",", false),
+        "=",
+        list_of(field("value", $._expression), ",", false),
+      ),
+
+    _declaration: ($) =>
+      choice(
+        $.variable_declaration,
+        $.function_declaration,
+      ),
+
     variable_declaration: ($) =>
-      prec.right(
-        PREC.DEFAULT,
-        seq(
-          optional(field("documentation", $.lua_documentation)),
-          optional($.local),
-          list_of(field("name", $.variable_declarator), ",", false),
-          optional(
-            seq("=", list_of(field("value", $._expression), ",", false)),
-          ),
+      seq(
+        optional(field("documentation", $.lua_documentation)),
+        $.local,
+        list_of(field("name", $.variable_declarator), ",", false),
+        optional(
+          seq("=", list_of(field("value", $._expression), ",", false)),
         ),
       ),
 
-    // TODO: Fix that one test
-    // variable_declaration: ($) =>
-    //     prec.right(
-    //         PREC.PRIORITY,
-    //         seq(
-    //             field("documentation", optional($.lua_documentation)),
-    //             optional($.local),
-    //             field("name", $.variable_declarator),
-    //             any_amount_of(",", field("name", $.variable_declarator)),
-    //             optional(
-    //                 seq(
-    //                     "=",
-    //                     field("value", $._expression),
-    //                     any_amount_of(",", field("value", $._expression))
-    //                 )
-    //             )
-    //         )
-    //     ),
+    function_declaration: ($) =>
+      seq(
+        optional(field("documentation", $.lua_documentation)),
+        choice(
+          seq(
+            alias("local", $.local),
+            $.function_start,
+            field("name", $.identifier),
+          ),
+          seq($.function_start, /\s*/, field("name", $.function_name)),
+        ),
+        $.function_impl,
+      ),
+
 
     variable_declarator: ($) => $._var,
 
@@ -362,22 +372,6 @@ module.exports = grammar({
 
     function_start: () => "function",
 
-    function_statement: ($) =>
-      prec.right(
-        PREC.DEFAULT,
-        seq(
-          optional(field("documentation", $.lua_documentation)),
-          choice(
-            seq(
-              alias("local", $.local),
-              $.function_start,
-              field("name", $.identifier),
-            ),
-            seq($.function_start, /\s*/, field("name", $.function_name)),
-          ),
-          $.function_impl,
-        ),
-      ),
 
     // }}}
 
@@ -524,70 +518,8 @@ module.exports = grammar({
         ),
       ),
 
-    doc_ignore: () => /---\n/,
-    doc_comment: ($) =>
-      // token(prec.right(repeat1(choice(/---[^@\n]*\n/, /---\n/)))),
-      token(/[^@\n]*\n/),
-
-    // doc_type_array: ($) => seq(field("type", $._doc_type), "[]"),
-    // doc_type_key_value: ($) =>
-    //   seq(
-    //     "table<",
-    //     field("key", $._doc_type),
-    //     ",",
-    //     field("value", $._doc_type),
-    //     ">",
-    //   ),
-
-    // doc_type_dictionary: ($) =>
-    //   seq("{", list_of($.doc_type_dictionary_value, ",", true), "}"),
-
-    // doc_function: ($) =>
-    //   prec.right(
-    //     PREC.FUNCTION,
-    //     seq(
-    //       choice("function(", "fun("),
-    //       list_of($.doc_function_parameter, ",", false),
-    //       ")",
-    //       optional(seq(":", $.doc_identifier)),
-    //     ),
-    //   ),
-
-    // doc_function_parameter: ($) =>
-    //   seq(
-    //     field("name", $.identifier),
-    //     optional(seq(":", field("type", $._doc_type))),
-    //   ),
-
-    // doc_identifier: ($) => list_of($._identifier, ".", false),
-
-    // doc_type: ($) =>
-    //   seq(
-    //     choice(
-    //       $.doc_type_array,
-    //       $.doc_type_dictionary,
-    //       $.doc_type_key_value,
-    //       $.doc_function,
-    //       $.doc_identifier,
-    //       alias($.string, $.doc_literal),
-    //     ),
-    //     field("nullable", optional("?")),
-    //   ),
-
-    // doc_type_dictionary_value: ($) =>
-    //   seq(
-    //     field("key", choice($.identifier, seq("[", $._expression, "]"))),
-    //     ":",
-    //     field("value", $._doc_type),
-    //   ),
-
-    // // Union Type           TYPE_1 | TYPE_2
-    // // Array                VALUE_TYPE[]
-    // // Dictionary           { [string]: VALUE_TYPE }
-    // // Key-Value Table      table<KEY_TYPE, VALUE_TYPE>
-    // // Table Literal        { key1: VALUE_TYPE, key2: VALUE_TYPE }
-    // // Function             fun(PARAM: TYPE): RETURN_TYPE
-    // _doc_type: ($) => prec.right(PREC.COMMA, list_of($.doc_type, "|", false)),
+    doc_ignore: () => /\s*\n/,
+    doc_comment: ($) => token(/[^@\n]*\n/),
 
     _doc_type: ($) =>
       prec.right(
@@ -736,9 +668,7 @@ module.exports = grammar({
               $.ellipsis,
             ),
           ),
-          /\s+/,
           field("type", $._doc_type),
-
           optional(
             seq(/\s*:?\s*/, field("description", $.parameter_description)),
           ),
@@ -783,29 +713,25 @@ module.exports = grammar({
     parameter_description: ($) => $._multiline_doc_string,
 
     // doc_return_description: ($) => $._multiline_doc_string,
-    doc_return_description: ($) => /[^\n]*/,
+    doc_return_description: ($) => token(prec.right(seq(/[^\r\n]+/, /\r\n/))),
 
     // ---@return <type> [<name> [comment] | [name] #<comment>]
-    // ---@return boolean enabled
     doc_return: ($) =>
       prec.right(
-        PREC.PRIORITY,
         seq(
-          /@return\s*/,
+          "@return",
           field("type", $._doc_type),
           optional(
             choice(
               seq(
                 field("name", $.identifier),
                 optional(
-                  seq(/ */, field("description", $.doc_return_description)),
+                  field("description", $.doc_return_description),
                 ),
-                /\n\s*/,
               ),
               seq(
                 choice(/\s*:\s*/, /\s*#\s*/),
                 field("description", $.doc_return_description),
-                /\n\s*/,
               ),
             ),
           ),
@@ -825,7 +751,7 @@ module.exports = grammar({
     lua_documentation: ($) =>
       one_or_more(
         seq(
-          /\s*---/,
+          "---",
           choice(
             $.doc_comment,
             $.doc_ignore,

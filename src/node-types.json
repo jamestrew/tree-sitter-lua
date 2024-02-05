@@ -1,5 +1,91 @@
 [
   {
+    "type": "assignment",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": "variable_declarator",
+            "named": true
+          }
+        ]
+      },
+      "value": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": ".",
+            "named": false
+          },
+          {
+            "type": "[",
+            "named": false
+          },
+          {
+            "type": "]",
+            "named": false
+          },
+          {
+            "type": "binary_operation",
+            "named": true
+          },
+          {
+            "type": "boolean",
+            "named": true
+          },
+          {
+            "type": "ellipsis",
+            "named": true
+          },
+          {
+            "type": "function",
+            "named": true
+          },
+          {
+            "type": "function_call",
+            "named": true
+          },
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "left_paren",
+            "named": true
+          },
+          {
+            "type": "nil",
+            "named": true
+          },
+          {
+            "type": "number",
+            "named": true
+          },
+          {
+            "type": "right_paren",
+            "named": true
+          },
+          {
+            "type": "string",
+            "named": true
+          },
+          {
+            "type": "tableconstructor",
+            "named": true
+          },
+          {
+            "type": "unary_operation",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "binary_operation",
     "named": true,
     "fields": {},
@@ -81,6 +167,10 @@
       "required": true,
       "types": [
         {
+          "type": "assignment",
+          "named": true
+        },
+        {
           "type": "break_statement",
           "named": true
         },
@@ -105,7 +195,7 @@
           "named": true
         },
         {
-          "type": "function_statement",
+          "type": "function_declaration",
           "named": true
         },
         {
@@ -751,11 +841,6 @@
         ]
       }
     }
-  },
-  {
-    "type": "doc_return_description",
-    "named": true,
-    "fields": {}
   },
   {
     "type": "doc_see",
@@ -1909,6 +1994,10 @@
       "required": true,
       "types": [
         {
+          "type": "assignment",
+          "named": true
+        },
+        {
           "type": "break_statement",
           "named": true
         },
@@ -1945,7 +2034,7 @@
           "named": true
         },
         {
-          "type": "function_statement",
+          "type": "function_declaration",
           "named": true
         },
         {
@@ -2074,6 +2163,10 @@
       "required": true,
       "types": [
         {
+          "type": "assignment",
+          "named": true
+        },
+        {
           "type": "break_statement",
           "named": true
         },
@@ -2090,7 +2183,7 @@
           "named": true
         },
         {
-          "type": "function_statement",
+          "type": "function_declaration",
           "named": true
         },
         {
@@ -2239,35 +2332,7 @@
     "fields": {}
   },
   {
-    "type": "function_name",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "identifier",
-          "named": true
-        },
-        {
-          "type": "table_colon",
-          "named": true
-        },
-        {
-          "type": "table_dot",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "function_start",
-    "named": true,
-    "fields": {}
-  },
-  {
-    "type": "function_statement",
+    "type": "function_declaration",
     "named": true,
     "fields": {
       "documentation": {
@@ -2327,6 +2392,34 @@
     }
   },
   {
+    "type": "function_name",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "table_colon",
+          "named": true
+        },
+        {
+          "type": "table_dot",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "function_start",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "identifier",
     "named": true,
     "fields": {}
@@ -2354,6 +2447,10 @@
       "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "assignment",
+          "named": true
+        },
         {
           "type": "binary_operation",
           "named": true
@@ -2387,7 +2484,7 @@
           "named": true
         },
         {
-          "type": "function_statement",
+          "type": "function_declaration",
           "named": true
         },
         {
@@ -2639,6 +2736,10 @@
       "required": false,
       "types": [
         {
+          "type": "assignment",
+          "named": true
+        },
+        {
           "type": "do_statement",
           "named": true
         },
@@ -2671,7 +2772,7 @@
           "named": true
         },
         {
-          "type": "function_statement",
+          "type": "function_declaration",
           "named": true
         },
         {
@@ -2710,6 +2811,10 @@
       "required": true,
       "types": [
         {
+          "type": "assignment",
+          "named": true
+        },
+        {
           "type": "binary_operation",
           "named": true
         },
@@ -2742,7 +2847,7 @@
           "named": true
         },
         {
-          "type": "function_statement",
+          "type": "function_declaration",
           "named": true
         },
         {
@@ -3138,7 +3243,7 @@
     },
     "children": {
       "multiple": false,
-      "required": false,
+      "required": true,
       "types": [
         {
           "type": "local",
@@ -3219,6 +3324,10 @@
       "required": true,
       "types": [
         {
+          "type": "assignment",
+          "named": true
+        },
+        {
           "type": "binary_operation",
           "named": true
         },
@@ -3251,7 +3360,7 @@
           "named": true
         },
         {
-          "type": "function_statement",
+          "type": "function_declaration",
           "named": true
         },
         {
@@ -3362,6 +3471,10 @@
     "named": false
   },
   {
+    "type": "---",
+    "named": false
+  },
+  {
     "type": ".",
     "named": false
   },
@@ -3419,6 +3532,10 @@
   },
   {
     "type": "?",
+    "named": false
+  },
+  {
+    "type": "@return",
     "named": false
   },
   {
@@ -3483,6 +3600,10 @@
   },
   {
     "type": "doc_ignore",
+    "named": true
+  },
+  {
+    "type": "doc_return_description",
     "named": true
   },
   {
@@ -3571,11 +3692,11 @@
   },
   {
     "type": "number",
-    "named": true
+    "named": false
   },
   {
     "type": "number",
-    "named": false
+    "named": true
   },
   {
     "type": "or",

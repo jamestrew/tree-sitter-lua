@@ -10,7 +10,7 @@ do x = 1 end
 (program
   (do_statement
     (do_start)
-    (variable_declaration
+    (assignment
       (variable_declarator (identifier))
       (number))
     (do_end)))
@@ -29,7 +29,7 @@ end
 (program
   (do_statement
     (do_start)
-    (variable_declaration
+    (assignment
       (variable_declarator (identifier))
       (number))
     (function_call
@@ -49,7 +49,7 @@ while false do x = x + 1 end
   (while_start)
   (boolean)
   (while_do)
-  (variable_declaration
+  (assignment
     (variable_declarator (identifier))
     (binary_operation (identifier) (number)))
   (while_end)))
@@ -65,7 +65,7 @@ repeat x = x + 1 until true
 (program
  (repeat_statement
   (repeat_start)
-  (variable_declaration
+  (assignment
     (variable_declarator (identifier))
     (binary_operation (identifier) (number)))
   (repeat_until)
@@ -125,7 +125,7 @@ for x = 1, 10 do print(x) end
     start: (number)
     finish: (number))
   (for_do)
-  (function_call 
+  (function_call
     prefix: (identifier)
     (function_call_paren)
     args: (function_arguments (identifier))
@@ -149,7 +149,7 @@ for x = 1, 10, z do print(x) end
     finish: (number)
     step: (identifier))
   (for_do)
-  (function_call 
+  (function_call
     prefix: (identifier)
     (function_call_paren)
     args: (function_arguments (identifier))
@@ -176,7 +176,7 @@ for k, v in ipairs(x) do print(k, v) end
       args: (function_arguments (identifier))
       (function_call_paren)))
   (for_do)
-  (function_call 
+  (function_call
     prefix: (identifier)
     (function_call_paren)
     args: (function_arguments (identifier) (identifier))

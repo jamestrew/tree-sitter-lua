@@ -134,7 +134,7 @@
 
 ; TODO: returns
 
-(doc_header) @comment
+(doc_comment) @comment
 (doc_ignore) @comment
 (documentation_brief) @comment
 
