@@ -843,6 +843,11 @@
     }
   },
   {
+    "type": "doc_return_description",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "doc_see",
     "named": true,
     "fields": {}
@@ -3435,6 +3440,10 @@
     "named": false
   },
   {
+    "type": " ",
+    "named": false
+  },
+  {
     "type": "#",
     "named": false
   },
@@ -3603,10 +3612,6 @@
     "named": true
   },
   {
-    "type": "doc_return_description",
-    "named": true
-  },
-  {
     "type": "documentation_command_content",
     "named": true
   },
@@ -3692,11 +3697,11 @@
   },
   {
     "type": "number",
-    "named": false
+    "named": true
   },
   {
     "type": "number",
-    "named": true
+    "named": false
   },
   {
     "type": "or",

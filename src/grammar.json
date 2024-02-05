@@ -3846,7 +3846,7 @@
               "members": [
                 {
                   "type": "PATTERN",
-                  "value": "\\s*---[^\\n]*"
+                  "value": "\\s*---[^@\\n]*"
                 }
               ]
             }
@@ -3867,24 +3867,8 @@
       "name": "_multiline_doc_string"
     },
     "doc_return_description": {
-      "type": "TOKEN",
-      "content": {
-        "type": "PREC_RIGHT",
-        "value": 0,
-        "content": {
-          "type": "SEQ",
-          "members": [
-            {
-              "type": "PATTERN",
-              "value": "[^\\r\\n]+"
-            },
-            {
-              "type": "PATTERN",
-              "value": "\\r\\n"
-            }
-          ]
-        }
-      }
+      "type": "SYMBOL",
+      "name": "_multiline_doc_string"
     },
     "doc_return": {
       "type": "PREC_RIGHT",
@@ -3925,12 +3909,21 @@
                         "type": "CHOICE",
                         "members": [
                           {
-                            "type": "FIELD",
-                            "name": "description",
-                            "content": {
-                              "type": "SYMBOL",
-                              "name": "doc_return_description"
-                            }
+                            "type": "SEQ",
+                            "members": [
+                              {
+                                "type": "STRING",
+                                "value": " "
+                              },
+                              {
+                                "type": "FIELD",
+                                "name": "description",
+                                "content": {
+                                  "type": "SYMBOL",
+                                  "name": "doc_return_description"
+                                }
+                              }
+                            ]
                           },
                           {
                             "type": "BLANK"
@@ -3946,12 +3939,12 @@
                         "type": "CHOICE",
                         "members": [
                           {
-                            "type": "PATTERN",
-                            "value": "\\s*:\\s*"
+                            "type": "STRING",
+                            "value": ":"
                           },
                           {
-                            "type": "PATTERN",
-                            "value": "\\s*#\\s*"
+                            "type": "STRING",
+                            "value": "#"
                           }
                         ]
                       },

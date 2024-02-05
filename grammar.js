@@ -702,7 +702,7 @@ module.exports = grammar({
     _multiline_doc_string: ($) =>
       prec.right(
         PREC.PRIORITY,
-        seq(/[^\n]+/, any_amount_of(/\s*---[^\n]*/)),
+        seq(/[^\n]+/, any_amount_of(/\s*---[^@\n]*/)),
         // seq(/[^\n]*/, any_amount_of(/\n\s*---[^\n]*/))
       ),
 
@@ -712,8 +712,7 @@ module.exports = grammar({
     // TODO(conni2461): Pretty sure that doesn't work as expected
     parameter_description: ($) => $._multiline_doc_string,
 
-    // doc_return_description: ($) => $._multiline_doc_string,
-    doc_return_description: ($) => token(prec.right(seq(/[^\r\n]+/, /\r\n/))),
+    doc_return_description: ($) => $._multiline_doc_string,
 
     // ---@return <type> [<name> [comment] | [name] #<comment>]
     doc_return: ($) =>
@@ -726,11 +725,14 @@ module.exports = grammar({
               seq(
                 field("name", $.identifier),
                 optional(
-                  field("description", $.doc_return_description),
+                  seq(
+                    " ",
+                    field("description", $.doc_return_description),
+                  )
                 ),
               ),
               seq(
-                choice(/\s*:\s*/, /\s*#\s*/),
+                choice(":", "#"),
                 field("description", $.doc_return_description),
               ),
             ),
