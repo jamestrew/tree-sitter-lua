@@ -251,20 +251,14 @@ module.exports = grammar({
         list_of(field("value", $._expression), ",", false),
       ),
 
-    _declaration: ($) =>
-      choice(
-        $.variable_declaration,
-        $.function_declaration,
-      ),
+    _declaration: ($) => choice($.variable_declaration, $.function_declaration),
 
     variable_declaration: ($) =>
       seq(
         optional(field("documentation", $.lua_documentation)),
         $.local,
         list_of(field("name", $.variable_declarator), ",", false),
-        optional(
-          seq("=", list_of(field("value", $._expression), ",", false)),
-        ),
+        optional(seq("=", list_of(field("value", $._expression), ",", false))),
       ),
 
     function_declaration: ($) =>
@@ -280,7 +274,6 @@ module.exports = grammar({
         ),
         $.function_impl,
       ),
-
 
     variable_declarator: ($) => $._var,
 
@@ -371,7 +364,6 @@ module.exports = grammar({
       ),
 
     function_start: () => "function",
-
 
     // }}}
 
@@ -519,7 +511,7 @@ module.exports = grammar({
       ),
 
     doc_ignore: () => /\s*\n/,
-    doc_comment: ($) => token(/[^@\n]*\n/),
+    doc_comment: ($) => /[^@\n]*\n/,
 
     _doc_type: ($) =>
       prec.right(
@@ -554,8 +546,11 @@ module.exports = grammar({
         ),
       ),
 
-    doc_identifier: ($) =>
+    _doc_identifier: ($) =>
       prec(PREC.PRIORITY, list_of($._identifier, ".", false)),
+
+    doc_identifier: ($) =>
+      choice(seq("`", $._doc_identifier, "`"), $._doc_identifier),
 
     _doc_type_bool: ($) => choice("boolean", "bool"),
     _doc_type_func: ($) => choice("function", "fun"),
@@ -655,28 +650,6 @@ module.exports = grammar({
       prec.right(PREC.PROGRAM, seq($.doc_class, any_amount_of($.doc_field))),
 
     // Definition:
-    // ---@param <name[?]> <type[|type...]> [description]
-    doc_parameter: ($) =>
-      prec.right(
-        PREC.PRIORITY,
-        seq(
-          /@param\s+/,
-          field(
-            "name",
-            choice(
-              seq($.identifier, field("nullable", optional("?"))),
-              $.ellipsis,
-            ),
-          ),
-          field("type", $._doc_type),
-          optional(
-            seq(/\s*:?\s*/, field("description", $.parameter_description)),
-          ),
-          /\n\s*/,
-        ),
-      ),
-
-    // Definition:
     // ---@field [public|protected|private] field_name MY_TYPE[|other_type] [@comment]
     //
     // I don't think [public|protected|private] is useful for us.
@@ -699,18 +672,58 @@ module.exports = grammar({
 
     doc_visibility: () => choice("public", "protected", "private"),
 
-    _multiline_doc_string: ($) =>
+    // ---@generic <name> [:parent_type] [, <name> [:parent_type]]
+    // generics are still wip https://github.com/LuaLS/lua-language-server/issues/1861
+    doc_generic: ($) =>
+      seq(
+        "@generic",
+        list_of(
+          seq(
+            field("name", $.identifier),
+            optional(field("type", seq(":", field("parent", $._doc_type)))),
+          ),
+          ",",
+          false,
+        ),
+      ),
+
+    // Definition:
+    // ---@param <name[?]> <type[|type...]> [description]
+    doc_parameter: ($) =>
       prec.right(
         PREC.PRIORITY,
-        seq(/[^\n]+/, any_amount_of(/\s*---[^@\n]*/)),
-        // seq(/[^\n]*/, any_amount_of(/\n\s*---[^\n]*/))
+        seq(
+          /@param\s+/,
+          field(
+            "name",
+            choice($.identifier, $.optional_identifier, $.ellipsis),
+          ),
+          field("type", $._doc_type),
+          optional(
+            seq(
+              token.immediate(choice(" ", ":")),
+              field("description", $.parameter_description),
+            ),
+          ),
+          any_amount_of($.doc_parameter_enum),
+        ),
       ),
+
+    optional_identifier: ($) => seq($._identifier, "?"),
+    parameter_description: ($) => /[^\n]+/,
+
+    doc_parameter_enum: ($) =>
+      seq(
+        / *--- *\|/,
+        field("type", $._doc_type),
+        optional(seq("#", field("description", $.parameter_description))),
+      ),
+
+    _multiline_doc_string: ($) =>
+      prec.right(PREC.PRIORITY, seq(/[^\n]+/, any_amount_of(/\s*---[^@\n]*/))),
 
     class_description: ($) => $._multiline_doc_string,
     field_description: ($) => $._multiline_doc_string,
-
-    // TODO(conni2461): Pretty sure that doesn't work as expected
-    parameter_description: ($) => $._multiline_doc_string,
 
     doc_return_description: ($) => $._multiline_doc_string,
 
@@ -725,10 +738,7 @@ module.exports = grammar({
               seq(
                 field("name", $.identifier),
                 optional(
-                  seq(
-                    " ",
-                    field("description", $.doc_return_description),
-                  )
+                  seq(" ", field("description", $.doc_return_description)),
                 ),
               ),
               seq(
@@ -759,8 +769,9 @@ module.exports = grammar({
             $.doc_ignore,
             $._doc_eval_container,
             $.doc_class,
-            $.doc_parameter,
             $.doc_field,
+            $.doc_generic,
+            $.doc_parameter,
             $.doc_typedecl,
             $.doc_note,
             $.doc_see,

@@ -302,294 +302,321 @@ end
     (function_end)))
 
 
-;================================================================================
-;Function param (simple)
-;================================================================================
-;
-;---@param username string
-;---@param foo string|boolean
-;function setUsername(username, foo) end
-;
-;--------------------------------------------------------------------------------
-;
-;(program
-;  (function_declaration
-;    documentation: (lua_documentation
-;      (doc_parameter
-;        name: (identifier)
-;        type: (doc_type_builtin))
-;      (doc_parameter
-;        name: (identifier)
-;        type: (doc_type_union
-;          (doc_type_builtin)
-;          (doc_type_builtin))))
-;    (function_start)
-;    name: (function_name
-;      (identifier))
-;    (function_body_paren)
-;    (parameter_list
-;      (identifier)
-;      (identifier))
-;    (function_body_paren)
-;    (function_end)))
+================================================================================
+Function param (simple)
+================================================================================
+
+---@param username string
+---@param foo string|boolean
+function setUsername(username, foo) end
+
+--------------------------------------------------------------------------------
+
+(program
+  (function_declaration
+    documentation: (lua_documentation
+      (doc_parameter
+        name: (identifier)
+        type: (doc_type_builtin))
+      (doc_parameter
+        name: (identifier)
+        type: (doc_type_union
+          (doc_type_builtin)
+          (doc_type_builtin))))
+    (function_start)
+    name: (function_name
+      (identifier))
+    (function_body_paren)
+    (parameter_list
+      (identifier)
+      (identifier))
+    (function_body_paren)
+    (function_end)))
 
 
-;================================================================================
-;Function param (simple w/ desc)
-;================================================================================
-;
-;---@param username string The name to set for this user
-;function setUsername(username) end
-;
-;--------------------------------------------------------------------------------
-;
-;(program
-;  (function_declaration
-;    documentation: (lua_documentation
-;      (doc_parameter
-;        name: (identifier)
-;        type: (doc_type_builtin)
-;        description: (parameter_description)))
-;    (function_start)
-;    name: (function_name
-;      (identifier))
-;    (function_body_paren)
-;    (parameter_list
-;      (identifier))
-;    (function_body_paren)
-;    (function_end)))
-;
-;
-;================================================================================
-;Function param (optional para)
-;================================================================================
-;
-;---@param role "admin"|'user' The name of the role
-;---@param isActive? boolean: If the role is currently active
-;---@return Role
-;function Role.new(role, isActive) end
-;
-;--------------------------------------------------------------------------------
-;
-;(program
-;  (function_declaration
-;    documentation: (lua_documentation
-;      (doc_parameter
-;        name: (identifier)
-;        type: (doc_type
-;          (doc_literal))
-;        description: (parameter_description))
-;      (doc_parameter
-;        name: (identifier)
-;        type: (doc_type
-;          (doc_identifier))
-;        description: (parameter_description))
-;      (doc_return
-;        type: (doc_type
-;          (doc_identifier))))
-;    (function_start)
-;    name: (function_name
-;      (identifier)
-;      (table_dot)
-;      (identifier))
-;    (function_body_paren)
-;    (parameter_list
-;      (identifier)
-;      (identifier))
-;    (function_body_paren)
-;    (function_end)))
-;
-;
-;================================================================================
-;Function param (varargs)
-;================================================================================
-;
-;---@param index integer
-;---@param ... string Tags to add to this entry
-;local function addTags(index, ...) end
-;
-;--------------------------------------------------------------------------------
-;
-;(program
-;  (function_declaration
-;    documentation: (lua_documentation
-;      (doc_parameter
-;        name: (identifier)
-;        type: (doc_type
-;          (doc_literal))
-;        description: (parameter_description))
-;      (doc_parameter
-;        name: (identifier)
-;        type: (doc_type
-;          (doc_identifier))
-;        description: (parameter_description))
-;      (doc_return
-;        type: (doc_type
-;          (doc_identifier))))
-;    (function_start)
-;    name: (function_name
-;      (identifier)
-;      (table_dot)
-;      (identifier))
-;    (function_body_paren)
-;    (parameter_list
-;      (identifier)
-;      (identifier))
-;    (function_body_paren)
-;    (function_end)))
+================================================================================
+Function param (simple w/ desc)
+================================================================================
 
-;================================================================================
-;Full documentation, no return description
-;================================================================================
-;
-;--- A function description
-;---@param p string: param value
-;---@param x table: another value
-;---@return true
-;function cool_function(p, x)
-;  return true
-;end
-;
-;--------------------------------------------------------------------------------
-;
-;(program
-;  (function_declaration
-;    documentation: (lua_documentation
-;      (doc_comment)
-;      (doc_parameter
-;        name: (identifier)
-;        type: (doc_type
-;          (doc_identifier))
-;        description: (parameter_description))
-;      (doc_parameter
-;        name: (identifier)
-;        type: (doc_type
-;          (doc_identifier))
-;        description: (parameter_description))
-;      (doc_return
-;        type: (doc_type
-;          (doc_identifier))))
-;    (function_start)
-;    name: (function_name
-;      (identifier))
-;    (function_body_paren)
-;    (parameter_list
-;      (identifier)
-;      (identifier))
-;    (function_body_paren)
-;    (function_body
-;      (return_statement
-;        (boolean)))
-;    (function_end)))
-;
-;================================================================================
-;Full documentation, return description
-;================================================================================
-;
-;--- A function description
-;---@param p string: param value
-;---@param x table: another value
-;---@return true @comment A description
-;function cool_function(p, x)
-;  return true
-;end
-;
-;--------------------------------------------------------------------------------
-;
-;(program
-;  (function_declaration
-;    documentation: (lua_documentation
-;      (doc_comment)
-;      (doc_parameter
-;        name: (identifier)
-;        type: (doc_type
-;          (doc_identifier))
-;        description: (parameter_description))
-;      (doc_parameter
-;        name: (identifier)
-;        type: (doc_type
-;          (doc_identifier))
-;        description: (parameter_description))
-;      (doc_return
-;        type: (doc_type
-;          (doc_identifier))
-;        description: (doc_return_description)))
-;    (function_start)
-;    name: (function_name
-;      (identifier))
-;    (function_body_paren)
-;    (parameter_list
-;      (identifier)
-;      (identifier))
-;    (function_body_paren)
-;    (function_body
-;      (return_statement
-;        (boolean)))
-;    (function_end)))
-;
-;================================================================================
-;Ellipsis as parameter
-;================================================================================
-;
-;--- A function description
-;---@param ... vararg: param value
-;function cool_function(...)
-;  return true
-;end
-;
-;--------------------------------------------------------------------------------
-;
-;(program
-;  (function_declaration
-;    documentation: (lua_documentation
-;      (doc_comment)
-;      (doc_parameter
-;        name: (ellipsis)
-;        type: (doc_type
-;          (doc_identifier))
-;        description: (parameter_description)))
-;    (function_start)
-;    name: (function_name
-;      (identifier))
-;    (function_body_paren)
-;    (parameter_list
-;      (ellipsis))
-;    (function_body_paren)
-;    (function_body
-;      (return_statement
-;        (boolean)))
-;    (function_end)))
-;
-;================================================================================
-;Multiple types with spaces
-;================================================================================
-;
-;--- A function description
-;---@param p string| number : param value
-;function cool_function(p) end
-;
-;--------------------------------------------------------------------------------
-;
-;(program
-;  (function_declaration
-;    documentation: (lua_documentation
-;      (doc_comment)
-;      (doc_parameter
-;        name: (identifier)
-;        type: (doc_type
-;          (doc_identifier))
-;        type: (doc_type
-;          (doc_identifier))
-;        description: (parameter_description)))
-;    (function_start)
-;    name: (function_name
-;      (identifier))
-;    (function_body_paren)
-;    (parameter_list
-;      (identifier))
-;    (function_body_paren)
-;    (function_end)))
-;
+---@param username string The name to set for this user
+function setUsername(username) end
+
+--------------------------------------------------------------------------------
+
+(program
+  (function_declaration
+    documentation: (lua_documentation
+      (doc_parameter
+        name: (identifier)
+        type: (doc_type_builtin)
+        description: (parameter_description)))
+    (function_start)
+    name: (function_name
+      (identifier))
+    (function_body_paren)
+    (parameter_list
+      (identifier))
+    (function_body_paren)
+    (function_end)))
+
+
+================================================================================
+Function param (optional param)
+================================================================================
+
+---@param role "admin"|'user':The name of the role
+---@param isActive? boolean :   If the role is currently active
+---@return Role
+function Role.new(role, isActive) end
+
+--------------------------------------------------------------------------------
+
+(program
+  (function_declaration
+    documentation: (lua_documentation
+      (doc_parameter
+        name: (identifier)
+        type: (doc_type_union
+          (doc_literal)
+          (doc_literal))
+        description: (parameter_description))
+      (doc_parameter
+        name: (optional_identifier)
+        type: (doc_type_builtin)
+        description: (parameter_description))
+      (doc_return
+        type: (doc_identifier)))
+    (function_start)
+    name: (function_name
+      (identifier)
+      (table_dot)
+      (identifier))
+    (function_body_paren)
+    (parameter_list
+      (identifier)
+      (identifier))
+    (function_body_paren)
+    (function_end)))
+
+================================================================================
+Function param (varargs)
+================================================================================
+
+---@param index integer
+---@param ... string Tags to add to this entry
+local function addTags(index, ...) end
+
+--------------------------------------------------------------------------------
+
+(program
+  (function_declaration
+    documentation: (lua_documentation
+      (doc_parameter
+        name: (identifier)
+        type: (doc_type_builtin))
+      (doc_parameter
+        name: (ellipsis)
+        type: (doc_type_builtin)
+        description: (parameter_description)))
+    (local)
+    (function_start)
+    name: (identifier)
+    (function_body_paren)
+    (parameter_list
+      (identifier)
+      (ellipsis))
+    (function_body_paren)
+    (function_end)))
+
+================================================================================
+Full documentation, no return description
+================================================================================
+
+--- A function description
+---@param p string: param value
+---@param x table: another value
+---@return true
+function cool_function(p, x)
+ return true
+end
+
+--------------------------------------------------------------------------------
+
+(program
+  (function_declaration
+    documentation: (lua_documentation
+      (doc_comment)
+      (doc_parameter
+        name: (identifier)
+        type: (doc_type_builtin)
+        description: (parameter_description))
+      (doc_parameter
+        name: (identifier)
+        type: (doc_type_builtin)
+        description: (parameter_description))
+      (doc_return
+        type: (doc_identifier)))
+    (function_start)
+    name: (function_name
+      (identifier))
+    (function_body_paren)
+    (parameter_list
+      (identifier)
+      (identifier))
+    (function_body_paren)
+    (function_body
+      (return_statement
+        (boolean)))
+    (function_end)))
+
+================================================================================
+Multiple types with spaces
+================================================================================
+
+--- A function description
+---@param p string| number : param value
+function cool_function(p) end
+
+--------------------------------------------------------------------------------
+
+(program
+  (function_declaration
+    documentation: (lua_documentation
+      (doc_comment)
+      (doc_parameter
+        name: (identifier)
+        type: (doc_type_union
+          (doc_type_builtin)
+          (doc_type_builtin))
+        description: (parameter_description)))
+    (function_start)
+    name: (function_name
+      (identifier))
+    (function_body_paren)
+    (parameter_list
+      (identifier))
+    (function_body_paren)
+    (function_end)))
+
+
+================================================================================
+Generic Function Parameter
+================================================================================
+
+---@generic T
+---@param objectID integer The ID of the object to set the type of
+---@param type `T` The type of object to set
+---@return `T` object The object as a Lua object
+local function setObjectType(objectID, type) end
+
+--------------------------------------------------------------------------------
+
+(program
+  (function_declaration
+    documentation: (lua_documentation
+      (doc_generic
+        name: (identifier))
+      (doc_parameter
+        name: (identifier)
+        type: (doc_type_builtin)
+        description: (parameter_description))
+      (doc_parameter
+        name: (identifier)
+        type: (doc_identifier)
+        description: (parameter_description))
+      (doc_return
+        type: (doc_identifier)
+        name: (identifier)
+        description: (doc_return_description)))
+    (local)
+    (function_start)
+    name: (identifier)
+    (function_body_paren)
+    (parameter_list
+      (identifier)
+      (identifier))
+    (function_body_paren)
+    (function_end)))
+
+
+================================================================================
+Custom Type Parameter
+================================================================================
+
+---@param mode string
+ --- | "'immediate'"  # comment 1 with weird spacing
+---|"'async'" # comment 2
+function bar(mode) end
+
+--------------------------------------------------------------------------------
+
+(program
+  (function_declaration
+    documentation: (lua_documentation
+      (doc_parameter
+        name: (identifier)
+        type: (doc_type_builtin)
+        (doc_parameter_enum
+          type: (doc_literal)
+          description: (parameter_description))
+        (doc_parameter_enum
+          type: (doc_literal)
+          description: (parameter_description))))
+    (function_start)
+    name: (function_name
+      (identifier))
+    (function_body_paren)
+    (parameter_list
+      (identifier))
+    (function_body_paren)
+    (function_end)))
+
+
+================================================================================
+Literal Custom Type Parameter
+================================================================================
+
+local A = 0
+local B = 1
+
+---@param active integer
+---| `A` # Has a value of 0
+---| `B`
+function set(active) end
+
+--------------------------------------------------------------------------------
+
+(program
+  (variable_declaration
+    (local)
+    name: (variable_declarator
+      (identifier))
+    value: (number))
+  (variable_declaration
+    (local)
+    name: (variable_declarator
+      (identifier))
+    value: (number))
+
+  (function_declaration
+    documentation: (lua_documentation
+      (doc_parameter
+        name: (identifier)
+        type: (doc_type_builtin)
+        (doc_parameter_enum
+          type: (doc_identifier)
+          description: (parameter_description))
+        (doc_parameter_enum
+          type: (doc_identifier))))
+    (function_start)
+    name: (function_name
+      (identifier))
+    (function_body_paren)
+    (parameter_list
+      (identifier))
+    (function_body_paren)
+    (function_end)))
+
 ;================================================================================
 ;Should work for variables as well
 ;================================================================================

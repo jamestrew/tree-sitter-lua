@@ -631,6 +631,82 @@
     }
   },
   {
+    "type": "doc_generic",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "parent": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "(",
+            "named": false
+          },
+          {
+            "type": ")",
+            "named": false
+          },
+          {
+            "type": "doc_identifier",
+            "named": true
+          },
+          {
+            "type": "doc_literal",
+            "named": true
+          },
+          {
+            "type": "doc_type_array",
+            "named": true
+          },
+          {
+            "type": "doc_type_builtin",
+            "named": true
+          },
+          {
+            "type": "doc_type_function",
+            "named": true
+          },
+          {
+            "type": "doc_type_key_value",
+            "named": true
+          },
+          {
+            "type": "doc_type_optional",
+            "named": true
+          },
+          {
+            "type": "doc_type_table_literal",
+            "named": true
+          },
+          {
+            "type": "doc_type_union",
+            "named": true
+          }
+        ]
+      },
+      "type": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": ":",
+            "named": false
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "doc_identifier",
     "named": true,
     "fields": {}
@@ -701,16 +777,86 @@
           {
             "type": "identifier",
             "named": true
+          },
+          {
+            "type": "optional_identifier",
+            "named": true
           }
         ]
       },
-      "nullable": {
+      "type": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": "(",
+            "named": false
+          },
+          {
+            "type": ")",
+            "named": false
+          },
+          {
+            "type": "doc_identifier",
+            "named": true
+          },
+          {
+            "type": "doc_literal",
+            "named": true
+          },
+          {
+            "type": "doc_type_array",
+            "named": true
+          },
+          {
+            "type": "doc_type_builtin",
+            "named": true
+          },
+          {
+            "type": "doc_type_function",
+            "named": true
+          },
+          {
+            "type": "doc_type_key_value",
+            "named": true
+          },
+          {
+            "type": "doc_type_optional",
+            "named": true
+          },
+          {
+            "type": "doc_type_table_literal",
+            "named": true
+          },
+          {
+            "type": "doc_type_union",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "doc_parameter_enum",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "doc_parameter_enum",
+    "named": true,
+    "fields": {
+      "description": {
         "multiple": false,
         "required": false,
         "types": [
           {
-            "type": "?",
-            "named": false
+            "type": "parameter_description",
+            "named": true
           }
         ]
       },
@@ -2602,6 +2748,10 @@
           "named": true
         },
         {
+          "type": "doc_generic",
+          "named": true
+        },
+        {
           "type": "doc_ignore",
           "named": true
         },
@@ -2705,6 +2855,11 @@
   },
   {
     "type": "nil",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "optional_identifier",
     "named": true,
     "fields": {}
   },
@@ -3544,6 +3699,10 @@
     "named": false
   },
   {
+    "type": "@generic",
+    "named": false
+  },
+  {
     "type": "@return",
     "named": false
   },
@@ -3561,6 +3720,10 @@
   },
   {
     "type": "^",
+    "named": false
+  },
+  {
+    "type": "`",
     "named": false
   },
   {

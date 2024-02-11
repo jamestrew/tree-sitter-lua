@@ -110,7 +110,7 @@
   (function_start)
   (function_end)] @keyword.function
 
-(doc_type) @type
+[(doc_type_builtin) (doc_identifier)] @type
 (doc_literal) @string
 (doc_parameter
  (identifier) @parameter
@@ -121,7 +121,7 @@
 (doc_function_parameter
   name: (_) @parameter)
 
-(doc_type_dictionary_value key: (identifier) @property)
+(doc_type_key_value key: (doc_identifier) @property)
 
 (doc_note) @comment
 (doc_see) @comment
