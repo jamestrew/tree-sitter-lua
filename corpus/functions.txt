@@ -215,3 +215,28 @@ function f() end
     (function_body_paren)
     (function_body_paren)
     (function_end)))
+
+
+==================
+Variable function assignment with documentation ahead of it
+==================
+
+---
+M.my_func = function(y) end
+
+---
+
+(program
+  (assignment
+    (lua_documentation
+      (doc_ignore))
+    (variable_declarator
+      (identifier)
+      (identifier))
+    (function
+      (function_start)
+      (function_body_paren)
+      (parameter_list
+        (identifier))
+      (function_body_paren)
+      (function_end))))

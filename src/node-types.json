@@ -3,6 +3,16 @@
     "type": "assignment",
     "named": true,
     "fields": {
+      "documentation": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "lua_documentation",
+            "named": true
+          }
+        ]
+      },
       "name": {
         "multiple": true,
         "required": true,

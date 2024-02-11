@@ -617,298 +617,285 @@ function set(active) end
     (function_body_paren)
     (function_end)))
 
-;================================================================================
-;Should work for variables as well
-;================================================================================
-;
-;--- Example of my_func
-;---@param y string: Y description
-;M.my_func = function(y)
-;end
-;
-;--------------------------------------------------------------------------------
-;
-;(program
-;  (variable_declaration
-;    documentation: (lua_documentation
-;      (doc_comment)
-;      (doc_parameter
-;        name: (identifier)
-;        type: (doc_type
-;          (doc_identifier))
-;        description: (parameter_description)))
-;    name: (variable_declarator
-;      (identifier)
-;      (identifier))
-;    value: (function
-;      (function_start)
-;      (function_body_paren)
-;      (parameter_list
-;        (identifier))
-;      (function_body_paren)
-;      (function_end))))
-;
-;================================================================================
-;Real life example from neovim
-;================================================================================
-;
-;--- Store Diagnostic[] by line
-;---@param diagnostics Diagnostic[]: hello
-;---@return table<number, Diagnostic[]>
-;local _diagnostic_lines = function(diagnostics)
-;end
-;
-;--------------------------------------------------------------------------------
-;
-;(program
-;  (variable_declaration
-;    documentation: (lua_documentation
-;      (doc_comment)
-;      (doc_parameter
-;        name: (identifier)
-;        type: (doc_type
-;          (doc_type_array
-;            type: (doc_type
-;              (doc_identifier))))
-;        description: (parameter_description))
-;      (doc_return
-;        type: (doc_type
-;          (doc_type_key_value
-;            key: (doc_type
-;              (doc_identifier))
-;            value: (doc_type
-;              (doc_type_array
-;                type: (doc_type
-;                  (doc_identifier))))))))
-;    (local)
-;    name: (variable_declarator
-;      (identifier))
-;    value: (function
-;      (function_start)
-;      (function_body_paren)
-;      (parameter_list
-;        (identifier))
-;      (function_body_paren)
-;      (function_end))))
-;
-;================================================================================
-;Real life example from neovim 2
-;================================================================================
-;
-;--- Save diagnostics to the current buffer.
-;---
-;--- Handles saving diagnostics from multiple clients in the same buffer.
-;---@param diagnostics Diagnostic[]
-;---@param bufnr number
-;---@param client_id number
-;function M.save(diagnostics, bufnr, client_id)
-;  validate {
-;    diagnostics = {diagnostics, 't'},
-;    bufnr = {bufnr, 'n'},
-;    client_id = {client_id, 'n', true},
-;  }
-;end
-;
-;--------------------------------------------------------------------------------
-;
-;(program
-;  (function_declaration
-;    (lua_documentation
-;      (doc_comment)
-;      (doc_parameter
-;        (identifier)
-;        (doc_type
-;          (doc_type_array
-;            (doc_type
-;              (doc_identifier)))))
-;      (doc_parameter
-;        (identifier)
-;        (doc_type
-;          (doc_identifier)))
-;      (doc_parameter
-;        (identifier)
-;        (doc_type
-;          (doc_identifier))))
-;    (function_start)
-;    (function_name
-;      (identifier)
-;      (table_dot)
-;      (identifier))
-;    (function_body_paren)
-;    (parameter_list
-;      (identifier)
-;      (identifier)
-;      (identifier))
-;    (function_body_paren)
-;    (function_body
-;      (function_call
-;        (identifier)
-;        (table_argument
-;          (fieldlist
-;            (field
-;              (identifier)
-;              (tableconstructor
-;                (fieldlist
-;                  (field
-;                    (identifier))
-;                  (field
-;                    (string)))))
-;            (field
-;              (identifier)
-;              (tableconstructor
-;                (fieldlist
-;                  (field
-;                    (identifier))
-;                  (field
-;                    (string)))))
-;            (field
-;              (identifier)
-;              (tableconstructor
-;                (fieldlist
-;                  (field
-;                    (identifier))
-;                  (field
-;                    (string))
-;                  (field
-;                    (boolean)))))))))
-;    (function_end)))
-;
-;================================================================================
-;Eval doc
-;================================================================================
-;
-;--- Cooler function, with no params
-;---@eval 7 + 15
-;function M:even_cooler()
-;end
-;
-;--------------------------------------------------------------------------------
-;
-;(program
-;  (function_declaration
-;    (lua_documentation
-;      (doc_comment)
-;      (doc_eval
-;        (binary_operation
-;          (number)
-;          (number))))
-;    (function_start)
-;    (function_name
-;      (identifier)
-;      (table_colon)
-;      (identifier))
-;    (function_body_paren)
-;    (function_body_paren)
-;    (function_end)))
-;
-;================================================================================
-;Multiple params
-;================================================================================
-;
-;
-;local x = {}
-;
-;--- This function has documentation
-;---@param abc string: Docs for abc
-;  ---@param def string: Other docs for def
-;---@param bxy string: Final docs
-;function x.hello(abc, def, bxy)
-;  return abc .. def .. bxy
-;end
-;
-;return x
-;
-;--------------------------------------------------------------------------------
-;
-;(program
-;  (variable_declaration
-;    (local)
-;    (variable_declarator
-;      (identifier))
-;    (tableconstructor))
-;  (function_declaration
-;    (lua_documentation
-;      (doc_comment)
-;      (doc_parameter
-;        (identifier)
-;        (doc_type
-;          (doc_identifier))
-;        (parameter_description))
-;      (doc_parameter
-;        (identifier)
-;        (doc_type
-;          (doc_identifier))
-;        (parameter_description))
-;      (doc_parameter
-;        (identifier)
-;        (doc_type
-;          (doc_identifier))
-;        (parameter_description)))
-;    (function_start)
-;    (function_name
-;      (identifier)
-;      (table_dot)
-;      (identifier))
-;    (function_body_paren)
-;    (parameter_list
-;      (identifier)
-;      (identifier)
-;      (identifier))
-;    (function_body_paren)
-;    (function_body
-;      (return_statement
-;        (binary_operation
-;          (binary_operation
-;            (identifier)
-;            (identifier))
-;          (identifier))))
-;    (function_end))
-;  (module_return_statement
-;    (identifier)))
-;
-;================================================================================
-;Field
-;================================================================================
-;
-;--- This function has documentation
-;---@param t table: Some table
-;---@field public name x.y: name
-;function M.hello(t)
-;  return t.name
-;end
-;
-;--------------------------------------------------------------------------------
-;
-;(program
-;  (function_declaration
-;    (lua_documentation
-;      (doc_comment)
-;      (doc_parameter
-;        (identifier)
-;        (doc_type
-;          (doc_identifier))
-;        (parameter_description))
-;      (doc_field
-;        (doc_visibility)
-;        (identifier)
-;        (doc_type
-;          (doc_identifier))
-;        (field_description)))
-;    (function_start)
-;    (function_name
-;      (identifier)
-;      (table_dot)
-;      (identifier))
-;    (function_body_paren)
-;    (parameter_list
-;      (identifier))
-;    (function_body_paren)
-;    (function_body
-;      (return_statement
-;        (identifier)
-;        (identifier)))
-;    (function_end)))
-;
+================================================================================
+Should work for variables as well
+================================================================================
+
+--- Example of my_func
+---@param y string: Y description
+M.my_func = function(y)
+end
+
+--------------------------------------------------------------------------------
+
+(program
+  (assignment
+    documentation: (lua_documentation
+      (doc_comment)
+      (doc_parameter
+        name: (identifier)
+        type: (doc_type_builtin)
+        description: (parameter_description)))
+    name: (variable_declarator
+      (identifier)
+      (identifier))
+    value: (function
+      (function_start)
+      (function_body_paren)
+      (parameter_list
+        (identifier))
+      (function_body_paren)
+      (function_end))))
+
+
+================================================================================
+Real life example from neovim
+================================================================================
+
+--- Store Diagnostic[] by line
+---@param diagnostics Diagnostic[]: hello
+---@return table<number, Diagnostic[]>
+local _diagnostic_lines = function(diagnostics)
+end
+
+--------------------------------------------------------------------------------
+
+(program
+  (variable_declaration
+    documentation: (lua_documentation
+      (doc_comment)
+      (doc_parameter
+        name: (identifier)
+        type: (doc_type_array
+          type: (doc_identifier))
+        description: (parameter_description))
+      (doc_return
+        type: (doc_type_key_value
+          key: (doc_type_builtin)
+          value: (doc_type_array
+            type: (doc_identifier)))))
+    (local)
+    name: (variable_declarator
+      (identifier))
+    value: (function
+      (function_start)
+      (function_body_paren)
+      (parameter_list
+        (identifier))
+      (function_body_paren)
+      (function_end))))
+
+================================================================================
+Real life example from neovim 2
+================================================================================
+
+--- Save diagnostics to the current buffer.
+---
+--- Handles saving diagnostics from multiple clients in the same buffer.
+---@param diagnostics Diagnostic[]
+---@param bufnr number
+---@param client_id number
+function M.save(diagnostics, bufnr, client_id)
+ validate {
+   diagnostics = {diagnostics, 't'},
+   bufnr = {bufnr, 'n'},
+   client_id = {client_id, 'n', true},
+ }
+end
+
+--------------------------------------------------------------------------------
+
+(program
+  (function_declaration
+    documentation: (lua_documentation
+      (doc_comment)
+      (doc_ignore)
+      (doc_comment)
+      (doc_parameter
+        name: (identifier)
+        type: (doc_type_array
+          type: (doc_identifier)))
+      (doc_parameter
+        name: (identifier)
+        type: (doc_type_builtin))
+      (doc_parameter
+        name: (identifier)
+        type: (doc_type_builtin)))
+    (function_start)
+    name: (function_name
+      (identifier)
+      (table_dot)
+      (identifier))
+    (function_body_paren)
+    (parameter_list
+      (identifier)
+      (identifier)
+      (identifier))
+    (function_body_paren)
+    (function_body
+      (function_call
+        prefix: (identifier)
+        args: (table_argument
+          (fieldlist
+            (field
+              name: (identifier)
+              value: (tableconstructor
+                (fieldlist
+                  (field
+                    value: (identifier))
+                  (field
+                    value: (string)))))
+            (field
+              name: (identifier)
+              value: (tableconstructor
+                (fieldlist
+                  (field
+                    value: (identifier))
+                  (field
+                    value: (string)))))
+            (field
+              name: (identifier)
+              value: (tableconstructor
+                (fieldlist
+                  (field
+                    value: (identifier))
+                  (field
+                    value: (string))
+                  (field
+                    value: (boolean)))))))))
+    (function_end)))
+
+================================================================================
+Eval doc
+================================================================================
+
+--- Cooler function, with no params
+---@eval 7 + 15
+function M:even_cooler()
+end
+
+--------------------------------------------------------------------------------
+
+(program
+  (function_declaration
+    (lua_documentation
+      (doc_comment)
+      (doc_eval
+        (binary_operation
+          (number)
+          (number))))
+    (function_start)
+    (function_name
+      (identifier)
+      (table_colon)
+      (identifier))
+    (function_body_paren)
+    (function_body_paren)
+    (function_end)))
+
+================================================================================
+Multiple params
+================================================================================
+
+
+local x = {}
+
+--- This function has documentation
+---@param abc string: Docs for abc
+ ---@param def string: Other docs for def
+---@param bxy string: Final docs
+function x.hello(abc, def, bxy)
+ return abc .. def .. bxy
+end
+
+return x
+
+--------------------------------------------------------------------------------
+
+(program
+  (variable_declaration
+    (local)
+    (variable_declarator
+      (identifier))
+    (tableconstructor))
+  (function_declaration
+    (lua_documentation
+      (doc_comment)
+      (doc_parameter
+        (identifier)
+        (doc_type_builtin)
+        (parameter_description))
+      (doc_parameter
+        (identifier)
+        (doc_type_builtin)
+        (parameter_description))
+      (doc_parameter
+        (identifier)
+        (doc_type_builtin)
+        (parameter_description)))
+    (function_start)
+    (function_name
+      (identifier)
+      (table_dot)
+      (identifier))
+    (function_body_paren)
+    (parameter_list
+      (identifier)
+      (identifier)
+      (identifier))
+    (function_body_paren)
+    (function_body
+      (return_statement
+        (binary_operation
+          (binary_operation
+            (identifier)
+            (identifier))
+          (identifier))))
+    (function_end))
+  (module_return_statement
+    (identifier)))
+
+================================================================================
+Field
+================================================================================
+
+--- This function has documentation
+---@param t table: Some table
+---@field public name x.y: name
+function M.hello(t)
+ return t.name
+end
+
+--------------------------------------------------------------------------------
+
+(program
+  (function_declaration
+    (lua_documentation
+      (doc_comment)
+      (doc_parameter
+        (identifier)
+        (doc_type_builtin)
+        (parameter_description))
+      (doc_field
+        (doc_visibility)
+        (identifier)
+        (doc_identifier)
+        (field_description)))
+    (function_start)
+    (function_name
+      (identifier)
+      (table_dot)
+      (identifier))
+    (function_body_paren)
+    (parameter_list
+      (identifier))
+    (function_body_paren)
+    (function_body
+      (return_statement
+        (identifier)
+        (identifier)))
+    (function_end)))
+
 ;================================================================================
 ;Class comment
 ;================================================================================

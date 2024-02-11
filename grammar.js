@@ -246,6 +246,7 @@ module.exports = grammar({
 
     assignment: ($) =>
       seq(
+        optional(field("documentation", $.lua_documentation)),
         list_of(field("name", $.variable_declarator), ",", false),
         "=",
         list_of(field("value", $._expression), ",", false),
