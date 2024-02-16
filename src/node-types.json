@@ -164,11 +164,6 @@
     "fields": {}
   },
   {
-    "type": "class_description",
-    "named": true,
-    "fields": {}
-  },
-  {
     "type": "do_statement",
     "named": true,
     "fields": {},
@@ -235,116 +230,36 @@
     "type": "doc_class",
     "named": true,
     "fields": {
-      "description": {
+      "name": {
         "multiple": false,
-        "required": false,
+        "required": true,
         "types": [
           {
-            "type": "class_description",
+            "type": "doc_identifier",
             "named": true
           }
         ]
       },
       "parent": {
-        "multiple": true,
+        "multiple": false,
         "required": false,
         "types": [
           {
-            "type": "(",
-            "named": false
-          },
-          {
-            "type": ")",
-            "named": false
-          },
-          {
             "type": "doc_identifier",
-            "named": true
-          },
-          {
-            "type": "doc_literal",
-            "named": true
-          },
-          {
-            "type": "doc_type_array",
-            "named": true
-          },
-          {
-            "type": "doc_type_builtin",
-            "named": true
-          },
-          {
-            "type": "doc_type_function",
-            "named": true
-          },
-          {
-            "type": "doc_type_key_value",
-            "named": true
-          },
-          {
-            "type": "doc_type_optional",
-            "named": true
-          },
-          {
-            "type": "doc_type_table_literal",
-            "named": true
-          },
-          {
-            "type": "doc_type_union",
-            "named": true
-          }
-        ]
-      },
-      "type": {
-        "multiple": true,
-        "required": true,
-        "types": [
-          {
-            "type": "(",
-            "named": false
-          },
-          {
-            "type": ")",
-            "named": false
-          },
-          {
-            "type": "doc_identifier",
-            "named": true
-          },
-          {
-            "type": "doc_literal",
-            "named": true
-          },
-          {
-            "type": "doc_type_array",
-            "named": true
-          },
-          {
-            "type": "doc_type_builtin",
-            "named": true
-          },
-          {
-            "type": "doc_type_function",
-            "named": true
-          },
-          {
-            "type": "doc_type_key_value",
-            "named": true
-          },
-          {
-            "type": "doc_type_optional",
-            "named": true
-          },
-          {
-            "type": "doc_type_table_literal",
-            "named": true
-          },
-          {
-            "type": "doc_type_union",
             "named": true
           }
         ]
       }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "doc_field",
+          "named": true
+        }
+      ]
     }
   },
   {
@@ -1506,15 +1421,11 @@
     "named": true,
     "fields": {},
     "children": {
-      "multiple": true,
+      "multiple": false,
       "required": true,
       "types": [
         {
           "type": "doc_class",
-          "named": true
-        },
-        {
-          "type": "doc_field",
           "named": true
         }
       ]
@@ -2729,11 +2640,6 @@
     "fields": {}
   },
   {
-    "type": "local",
-    "named": true,
-    "fields": {}
-  },
-  {
     "type": "lua_documentation",
     "named": true,
     "fields": {},
@@ -3625,6 +3531,10 @@
     "named": false
   },
   {
+    "type": "(exact)",
+    "named": false
+  },
+  {
     "type": ")",
     "named": false
   },
@@ -3706,6 +3616,14 @@
   },
   {
     "type": "?",
+    "named": false
+  },
+  {
+    "type": "@class",
+    "named": false
+  },
+  {
+    "type": "@field",
     "named": false
   },
   {
@@ -3858,7 +3776,7 @@
   },
   {
     "type": "local",
-    "named": false
+    "named": true
   },
   {
     "type": "nil",
@@ -3870,11 +3788,11 @@
   },
   {
     "type": "number",
-    "named": true
+    "named": false
   },
   {
     "type": "number",
-    "named": false
+    "named": true
   },
   {
     "type": "or",

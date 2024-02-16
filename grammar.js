@@ -267,11 +267,11 @@ module.exports = grammar({
         optional(field("documentation", $.lua_documentation)),
         choice(
           seq(
-            alias("local", $.local),
+            $.local,
             $.function_start,
             field("name", $.identifier),
           ),
-          seq($.function_start, /\s*/, field("name", $.function_name)),
+          seq($.function_start, field("name", $.function_name)),
         ),
         $.function_impl,
       ),
@@ -630,25 +630,20 @@ module.exports = grammar({
       ),
 
     // Definition:
-    // ---@class MY_TYPE[:PARENT_TYPE] [@comment]
-    //
-    // Example:
-    //
-    // ---@class transport @super class
-    // ---@class car : transport @car class
+    // ---@class [(exact)] <name>[: <parent>]
     doc_class: ($) =>
       prec.left(
         seq(
-          /@class\s+/,
-          field("type", $._doc_type),
-          optional(seq(/\s*:\s*/, field("parent", $._doc_type))),
-          optional(seq(/\s*@\s*/, field("description", $.class_description))),
-          /\n\s*/,
+          choice("@class", /--- *@class/),
+          optional("(exact)"),
+          field("name", $.doc_identifier),
+          optional(seq(":", field("parent", $.doc_identifier))),
+          any_amount_of($.doc_field),
         ),
       ),
 
     documentation_class: ($) =>
-      prec.right(PREC.PROGRAM, seq($.doc_class, any_amount_of($.doc_field))),
+      prec.right(PREC.PROGRAM, $.doc_class),
 
     // Definition:
     // ---@field [public|protected|private] field_name MY_TYPE[|other_type] [@comment]
@@ -659,7 +654,7 @@ module.exports = grammar({
     // ---@field example (table): hello
     doc_field: ($) =>
       seq(
-        /@field\s+/,
+        choice("@field", /--- *@field/),
         optional(seq(field("visibility", $.doc_visibility), /\s+/)),
         field("name", $.identifier),
         optional("?"),

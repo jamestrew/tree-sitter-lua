@@ -896,196 +896,124 @@ end
         (identifier)))
     (function_end)))
 
-;================================================================================
-;Class comment
-;================================================================================
-;
-;---@class Array @Numeric table
-;
-;--------------------------------------------------------------------------------
-;
-;(program
-;  (documentation_class
-;    (doc_class
-;      (doc_type
-;        (doc_identifier))
-;      (class_description))))
-;
-;================================================================================
-;Super class comment
-;================================================================================
-;
-;---@class Map @table table
-;---@class Array : Map @Numeric table
-;
-;--------------------------------------------------------------------------------
-;
-;(program
-;  (documentation_class
-;    (doc_class
-;      (doc_type
-;        (doc_identifier))
-;      (class_description)))
-;  (documentation_class
-;    (doc_class
-;      (doc_type
-;        (doc_identifier))
-;      (doc_type
-;        (doc_identifier))
-;      (class_description))))
-;
-;================================================================================
-;Class with fields
-;================================================================================
-;
-;---@class sqlite @db connection
-;
-;---@class Stmt @object to deal with sqlite statements
-;---@field conn sqlite: connection to database
-;
-;--------------------------------------------------------------------------------
-;
-;(program
-;  (documentation_class
-;    (doc_class
-;      (doc_type
-;        (doc_identifier))
-;      (class_description)))
-;  (documentation_class
-;    (doc_class
-;      (doc_type
-;        (doc_identifier))
-;      (class_description))
-;    (doc_field
-;      (identifier)
-;      (doc_type
-;        (doc_identifier))
-;      (field_description))))
-;
-;================================================================================
-;Real world class
-;================================================================================
-;
-;local Job = {}
-;--- HEADER
-;---@class Job @desc
-;---@field cmd string: comamnd
-;---@param o table: options
-;function Job:new(o)
-;  return setmetatable({}, self)
-;end
-;
-;--------------------------------------------------------------------------------
-;
-;(program
-;  (variable_declaration
-;    (local)
-;    (variable_declarator
-;      (identifier))
-;    (tableconstructor))
-;  (function_declaration
-;    (lua_documentation
-;      (doc_comment)
-;      (doc_class
-;        (doc_type
-;          (doc_identifier))
-;        (class_description))
-;      (doc_field
-;        (identifier)
-;        (doc_type
-;          (doc_identifier))
-;        (field_description))
-;      (doc_parameter
-;        (identifier)
-;        (doc_type
-;          (doc_identifier))
-;        (parameter_description)))
-;    (function_start)
-;    (function_name
-;      (identifier)
-;      (table_colon)
-;      (identifier))
-;    (function_body_paren)
-;    (parameter_list
-;      (identifier))
-;    (function_body_paren)
-;    (function_body
-;      (return_statement
-;        (function_call
-;          (identifier)
-;          (function_call_paren)
-;          (function_arguments
-;            (tableconstructor)
-;            (identifier))
-;          (function_call_paren))))
-;    (function_end)))
-;
-;================================================================================
-;Using classes as types
-;================================================================================
-;
-;local Job = {}
-;
-;---@class Map @table lie
-;
-;--- HEADER
-;---@class Job @desc
-;---@field cmd string: comamnd
-;---@param o table: options
-;function Job:new(o)
-;  return setmetatable(o, self)
-;end
-;
-;--------------------------------------------------------------------------------
-;
-;(program
-;  (variable_declaration
-;    (local)
-;    (variable_declarator
-;      (identifier))
-;    (tableconstructor))
-;  (documentation_class
-;    (doc_class
-;      (doc_type
-;        (doc_identifier))
-;      (class_description)))
-;  (function_declaration
-;    (lua_documentation
-;      (doc_comment)
-;      (doc_class
-;        (doc_type
-;          (doc_identifier))
-;        (class_description))
-;      (doc_field
-;        (identifier)
-;        (doc_type
-;          (doc_identifier))
-;        (field_description))
-;      (doc_parameter
-;        (identifier)
-;        (doc_type
-;          (doc_identifier))
-;        (parameter_description)))
-;    (function_start)
-;    (function_name
-;      (identifier)
-;      (table_colon)
-;      (identifier))
-;    (function_body_paren)
-;    (parameter_list
-;      (identifier))
-;    (function_body_paren)
-;    (function_body
-;      (return_statement
-;        (function_call
-;          (identifier)
-;          (function_call_paren)
-;          (function_arguments
-;            (identifier)
-;            (identifier))
-;          (function_call_paren))))
-;    (function_end)))
-;
+
+
+================================================================================
+Basic class
+================================================================================
+
+---@class Car
+local Car = {}
+
+--------------------------------------------------------------------------------
+
+(program
+  (documentation_class
+    (doc_class
+      name: (doc_identifier)))
+  (variable_declaration
+    (local)
+    name: (variable_declarator
+      (identifier))
+    value: (tableconstructor)))
+
+
+================================================================================
+Basic class with header
+================================================================================
+
+--- Car goes vroom
+---@class Car
+local Car = {}
+
+--------------------------------------------------------------------------------
+
+(program
+  (variable_declaration
+    documentation: (lua_documentation
+      (doc_comment)
+      (doc_class
+        name: (doc_identifier)))
+    (local)
+    name: (variable_declarator
+      (identifier))
+    value: (tableconstructor)))
+
+================================================================================
+Class Inheritance
+================================================================================
+
+---@class Vehicle
+
+---@class Car: Vehicle
+local Car = {}
+
+--------------------------------------------------------------------------------
+
+(program
+  (documentation_class
+    (doc_class
+      name: (doc_identifier)))
+  (documentation_class
+    (doc_class
+      name: (doc_identifier)
+      parent: (doc_identifier)))
+  (variable_declaration
+    (local)
+    name: (variable_declarator
+      (identifier))
+    value: (tableconstructor)))
+
+
+================================================================================
+Exact class
+================================================================================
+
+---@class (exact) Point
+---@field x number
+---@field y number
+local Point = {}
+Point.x = 1 -- OK
+Point.y = 2 -- OK
+Point.z = 3 -- Warning
+
+--------------------------------------------------------------------------------
+
+(program
+  (documentation_class
+    (doc_class
+      name: (doc_identifier)
+      (doc_field
+        name: (identifier)
+        type: (doc_type_builtin))
+      (doc_field
+        name: (identifier)
+        type: (doc_type_builtin))))
+  (variable_declaration
+    (local)
+    name: (variable_declarator
+      (identifier))
+    value: (tableconstructor))
+  (assignment
+    name: (variable_declarator
+      (identifier)
+      (identifier))
+    value: (number))
+  (comment)
+  (assignment
+    name: (variable_declarator
+      (identifier)
+      (identifier))
+    value: (number))
+  (comment)
+  (assignment
+    name: (variable_declarator
+      (identifier)
+      (identifier))
+    value: (number))
+  (comment))
+
+
 ;================================================================================
 ;Brief with embedded strings
 ;================================================================================

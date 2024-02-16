@@ -1676,13 +1676,8 @@
               "type": "SEQ",
               "members": [
                 {
-                  "type": "ALIAS",
-                  "content": {
-                    "type": "STRING",
-                    "value": "local"
-                  },
-                  "named": true,
-                  "value": "local"
+                  "type": "SYMBOL",
+                  "name": "local"
                 },
                 {
                   "type": "SYMBOL",
@@ -1704,10 +1699,6 @@
                 {
                   "type": "SYMBOL",
                   "name": "function_start"
-                },
-                {
-                  "type": "PATTERN",
-                  "value": "\\s*"
                 },
                 {
                   "type": "FIELD",
@@ -3575,15 +3566,36 @@
         "type": "SEQ",
         "members": [
           {
-            "type": "PATTERN",
-            "value": "@class\\s+"
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "STRING",
+                "value": "@class"
+              },
+              {
+                "type": "PATTERN",
+                "value": "--- *@class"
+              }
+            ]
+          },
+          {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "STRING",
+                "value": "(exact)"
+              },
+              {
+                "type": "BLANK"
+              }
+            ]
           },
           {
             "type": "FIELD",
-            "name": "type",
+            "name": "name",
             "content": {
               "type": "SYMBOL",
-              "name": "_doc_type"
+              "name": "doc_identifier"
             }
           },
           {
@@ -3593,15 +3605,15 @@
                 "type": "SEQ",
                 "members": [
                   {
-                    "type": "PATTERN",
-                    "value": "\\s*:\\s*"
+                    "type": "STRING",
+                    "value": ":"
                   },
                   {
                     "type": "FIELD",
                     "name": "parent",
                     "content": {
                       "type": "SYMBOL",
-                      "name": "_doc_type"
+                      "name": "doc_identifier"
                     }
                   }
                 ]
@@ -3610,48 +3622,6 @@
                 "type": "BLANK"
               }
             ]
-          },
-          {
-            "type": "CHOICE",
-            "members": [
-              {
-                "type": "SEQ",
-                "members": [
-                  {
-                    "type": "PATTERN",
-                    "value": "\\s*@\\s*"
-                  },
-                  {
-                    "type": "FIELD",
-                    "name": "description",
-                    "content": {
-                      "type": "SYMBOL",
-                      "name": "class_description"
-                    }
-                  }
-                ]
-              },
-              {
-                "type": "BLANK"
-              }
-            ]
-          },
-          {
-            "type": "PATTERN",
-            "value": "\\n\\s*"
-          }
-        ]
-      }
-    },
-    "documentation_class": {
-      "type": "PREC_RIGHT",
-      "value": 16,
-      "content": {
-        "type": "SEQ",
-        "members": [
-          {
-            "type": "SYMBOL",
-            "name": "doc_class"
           },
           {
             "type": "REPEAT",
@@ -3668,12 +3638,29 @@
         ]
       }
     },
+    "documentation_class": {
+      "type": "PREC_RIGHT",
+      "value": 16,
+      "content": {
+        "type": "SYMBOL",
+        "name": "doc_class"
+      }
+    },
     "doc_field": {
       "type": "SEQ",
       "members": [
         {
-          "type": "PATTERN",
-          "value": "@field\\s+"
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "STRING",
+              "value": "@field"
+            },
+            {
+              "type": "PATTERN",
+              "value": "--- *@field"
+            }
+          ]
         },
         {
           "type": "CHOICE",
